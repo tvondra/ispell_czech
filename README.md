@@ -53,9 +53,10 @@ Zdrojový soubor czech.dict pro vytvoření slovníku pro ispell se získá takt
 
 Sloučený soubor se zpracuje příkazem buildhash:
 
-    buildhash czech.dict czech.affix czech.hash
+    make czech.hash
 
-který vytvoří slovník pro ispell.
+který vytvoří slovník pro ispell (buildhash není součástí slovníku, musíte mít
+nainstalovaný např. ispell).
 
 
 Použití a rozšiřování slovníku
