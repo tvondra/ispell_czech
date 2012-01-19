@@ -1,0 +1,333 @@
+                         Český soubor afixů
+
+                              Prefixy
+
+V češtině se používá několik desítek přepon. Protože jsou distribuovány
+nepravidelně a počet příznaků použitelných programem ispell je nedostatečný,
+byly v českém slovníku pro ispell použity pro předpony pouze čtyři příznaky:
+
+N - generuje předponu ne- (zejména pro slovesa, přídavná jména a příslovce)
+E - generuje předponu nej- (vytvoření třetího stupně ze druhého stupně
+    přídavných jmen)
+W - generuje předpony ne-, nej- a nejne- (pro druhý stupeň přídavných jmen;
+    vytváří zápor a třetí stupeň včetně záporu)
+F - generuje předpony jedna-, dvaa-, třia-, čtyřia-, čtyrya-, pěta-, šesta-,
+    sedma-, osma-, devěta- (pro číslovky a složeniny obsahující číslovky
+    jako jednadvacet)
+
+Pro snadné používání ostatních předpon jsou ve zdrojových souborech použity
+seznamy tvaru {,do,po,při,u,vy,za}hladit/ACN. Tyto seznamy jsou perlovým
+skriptem glob.p expandovány na seznam slov, který již lze použít jako
+vstup programu buildhash:
+
+hladit/ACN
+dohladit/ACN
+pohladit/ACN
+přihladit/ACN
+uhladit/ACN
+vyhladit/ACN
+zahladit/ACN
+
+Skript glob.p pracuje tak, že rozděluje čtené řádky na řetězce neobsahující
+mezeru ani pomlčku či spojovník. Pokud některý z takto vzniklých řetězců
+obsahuje seznam uzavřený ve složených závorkách a skládající se z podřetězců
+oddělených čárkami, bude tento řetězec nahrazen sadou řetězců, které z něj
+vzniknou postupným nahrazováním celého seznamu jeho jednotlivými prvky.
+Všechny výsledné řetězce jsou vypisovány po jednom na řádku.
+
+Skript glob.p by bylo možné použít i pro jiné účely než pro expanzi
+seznamů předpon - například pro slova jako balk{o,ó}n/H. Toto použití však
+nedoporučuji, protože by mohlo působit problémy jiným pomocným programům
+a skriptům pro zpracování českého slovníku.
+
+Skript glob.p není schopen expandovat v jednom řetězci více než jeden seznam
+(například {nad,od,pod}{,e}pisování/SN), ani vnořené seznamy. Protože však
+každý řádek rozdělí na řetězce v místech mezer nebo pomlček, může být na
+jednom řádku více seznamů.
+
+Vložení všech použitelných předpon k jednotlivým slovům musí tedy zajistit
+osoba, která vytváří nebo rozšiřuje slovník. Přitom je třeba dávat pozor
+na to, že některé předpony mění vid sloves (honit x dohonit), tranzitivitu
+a tím i existenci trpného rodu (jásat x rozjásat), působí změny ve slovním
+základu (brát x sebrat) či ve způsobu ohýbání (krást > kradu x ukrást >
+ukradnu), a tím i mění příznaky příslušných slov.
+
+Pro slovesa se používají nejčastěji předpony do-, na-, nad-, nade-, o-, ob-,
+obe-, od-, ode-, po-, pod-, pode-, popo-, pou-, poz-, pro-, pře-, před-,
+přede-, při-, roz-, roze-, s-, se-, sou-, spo-, spolu-, u-, v-, ve-, vy-,
+vz-, z-, za- a ze-; pro podstatná jména bez-, beze-, do-, dů-, ná-, nad-,
+nade-, o-, ob-, obe-, od-, ode-, mezi-, po-, pod-, pode-, popo-, pou-,
+pro-, prů-, pře-, před-, přede-, pří-, roz-, roze-, s-, se-, sou-, spo-,
+spolu-, ú-, v-, ve-, vý-, vz-, z-, ze- a zá; pro přídavná jména a příslovce
+se používají všechny výše uvedené předpony a přípony vyjadřující množství
+jako jedno-, dvou-, dvoj-, tří-, troj-, více-, mnoho-, málo-, poměrně
+často se vyskytují také cizí předpony a-, anti-, de-, dez-, in-, inter-,
+intra-, im-, re-, trans-, un-, mono-, di-, tri-, single-, multi- a další.
+
+                               Sufixy
+
+Některá slova se skloňují nebo časují podle více vzorů. Pro tato slova
+je třeba uvádět všechny příznaky, i když některé z nich negenerují žádné
+tvary navíc (například klín/HL i když by stačilo klín/L). Slovník bude
+pravděpodobně použit i pro jiné programy než ispell, a v nich budou
+takovéto informace potřebné.
+
+            Příznaky pro podstatná jména mužského rodu životná
+
+P - generuje všechny tvary podstatných jmen vzorů pán a předseda kromě 1.
+    pádu množného čísla; výchozí tvar je 1. pád jednotného čísla
+
+Příznak P lze použít i pro slova končící na -o skloňovaná podle vzoru pán
+(dingo, příjmení Bidlo apod.), pro cizí jména končící na -e, které se při
+skloňování odsouvá (Goethe, Shakespeare) i pro slova končící na -u (guru,
+gurua). U slov končících na -ek a -ěk se toto e/ě v dalších tvarech vypouští,
+stejně tomu je i u slov končících na -el, před kterým není b, d, t, š, ž,
+i, o nebo u. Slova, která tomuto nevyhovují (lev, ďábel a syn - 5. pád
+jednotného čísla synu nikoli syne) a u kterých dochází ke změně slovního
+základu (bůh, vůl, pán) musí být uvedena jako nepravidelná se všemi tvary.
+
+Podle možných tvarů 1. pádu množného čísla se příznak P doplňuje jedním
+nebo několika z příznaků I, D, V. Příznak I generuje koncovku -i (včetně
+měkčení h > zi, ch > ši, r > ři, k > ci), příznak D koncovku -é a příznak
+V koncovku -ové.
+
+D - generuje tvary cizích podstatných jmen zakončených v 1. pádě množného
+    čísla koncovkou -es, -os nebo -us (Aristoteles, diskobolos, Kristus),
+    která se v dalších tvarech vypouští
+
+Příznak D má tedy dvě funkce: u slov zakončených -es, -os nebo -us generuje
+všechny tvary podstatného jména vzoru pán, zatímco u ostatních slov generuje
+pouze koncovku -é.
+
+U - generuje všechny tvary podstatných jmen vzoru muž a soudce, kromě tvaru
+    pro 1. pád množného čísla s koncovkou -ové; u slov zakončených na -ec
+    a -eň (s výjimkou -leň) vypouští -e-
+
+Ze životných podstatných jmen mužského rodu lze obvykle vytvořit přídavná
+jména individuálně přivlastňovací (vzor otcův). Tato přídavné jména je nutné
+uvést ve slovníku zvlášť s příznakem Y.
+
+           Příznaky pro podstatná jména mužského rodu neživotná
+
+H - generuje všechny tvary podle vzoru hrad bez pohybného -e-, kromě
+    tvaru s koncovkou -ě
+Q - generuje všechny tvary podle vzoru hrad s pohybným -e-, kromě tvaru
+    s koncovkou -ě, a dále všechny tvary slov podle vzoru hrad, zakončených
+    v 1. pádě jednotného čísla na -us nebo -os, které se v dalších pádech
+    odsouvá, u slov na -ismus generuje též tvary na -izmus
+L - generuje všechny tvary podle podvzoru ostrov (nebo les, který ovšem
+    kolísá mezi vzory ostrov a hrad), včetně tvaru s koncovkou -ě
+R - generuje tvar s koncovkou -ě
+S - generuje tvary podle vzoru stroj
+
+Pro podstatná jména skloňovaná podle vzoru hrad (2. pád hradu) je třeba
+vybrat příznak H, pokud nemají pohybné -e-, nebo příznak Q, pokud pohybné
+-e- mají. Podle tvaru 1. pádu jednotného čísla nelze zjistit, zda je ve
+slově pohybné -e- nebo není. Například ve slově úlek závisí pohybnost -e-
+na významu: ve významu "leknutí" se skloňuje úlek, úleku, zatímco ve významu
+"malý úl" se skloňuje úlek, úlku.
+
+Příznak H lze použít i pro cizí slova s koncovým -e skloňovaná podle vzoru
+hrad (software) a pro pomnožná podstatná jména vzoru hrad (rozpaky).
+
+U slov, která mají koncovku -ě, je nutné uvést také příznak R.
+
+U slov s koncovkou -us nebo -os generuje příznak H tvary -usu, -usem (např.
+autobus, autobusu, ...), zatímco příznak Q tvary bez -us- (např. realismus,
+realismu, ...; generuje i realizmus, realizmu, ...).
+
+Příznak Q má tedy více funkcí; kromě generování všech tvarů vzoru hrad pro
+slova s pohybným -e- a generování všech tvarů slov, která jsou skloňována
+podle vzoru hrad, a jsou zakončeny na odsouvané -us a -os, se používá i pro
+generování tvarů s prázdnou koncovkou pro slova podle vzorů žena, růže a
+město. Také příznak S má více funkcí, kromě vzoru stroj se používá i pro
+vzor stavení a pro jednotné číslo vzoru růže.
+
+                Příznaky pro podstatná jména ženského rodu
+
+Z - generuje tvary vzorů žena, růže (nůše) a píseň
+K - generuje tvary vzoru kost
+Q - generuje tvar s nulovou koncovkou pro slova vzoru žena a růže
+C - generuje tvary množného čísla vzoru růže (Dalešice, dveře)
+S - generuje tvary jednotného čísla vzoru růže (Roudnice)
+
+Pro podstatná jména ženského rodu se používá příznak Z nebo K. Pro slova
+vzoru žena a růže, která mají v 2. pádě množného čísla pravidelný tvar
+s prázdnou koncovkou se přidává příznak Q. Není-li tvar 2. pádu množného
+čísla pravidelný (houba > hub), uvede se ve slovníku na jednom řádku slovo
+s příznakem Z a tvar 2. pádu množného čísla.
+
+Příznak Z lze použít i pro cizí slova typu Antarktis. V tomto případě
+vygeneruje 1. pád jednotného čísla s tvarem -ida a další tvary kromě
+2. pádu množného čísla (který generuje příznak Q).
+
+Existuje téměř kontinuum slov kolísajících mezi vzory píseň a kost. U
+některých slov lze použít kombinaci příznaků KZ, u jiných ZI, někdy je
+třeba ještě doplnit chybějící tvary, výjimečně je nutné slovo považovat
+(pro ispell) za nepravidelné. Pro vyzkoušení generovaných tvarů lze použít
+příkaz sh inter a na výzvu ispell.cz: zadat slovo s lomítkem a příznaky,
+například modř/ZI.
+
+Pro pomnožná jména vzoru růže se používá příznak C, který na rozdíl od
+příznaku Z generuje i tvar 2. pádu množného čísla. A naopak, zejména pro
+jména obcí, které mají tvary jednotného čísla vzoru růže (Roudnice, Sušice)
+je vhodné použít příznak S generující pouze tvary jednotného čísla (i když
+v některých případech může být použití množného čísla namístě, například
+mluví-li se o více obcích stejného jména).
+
+Z podstatných jmen ženského rodu, které označují osoby, některá zvířata
+apod., lze obvykle vytvořit přídavná jména individuálně přivlastňovací
+(vzor matčin). Tato přídavné jména je nutné uvést ve slovníku zvlášť
+s příznakem Y.
+
+                Příznaky pro podstatná jména středního rodu
+
+M - generuje tvary vzorů město, moře, kromě tvarů vzoru město s koncovkou
+    -ě/-e a s prázdnou koncovkou, funguje také pro slova typu akvárium
+K - generuje tvary vzoru kuře a slov typu téma (tématu, ...)
+S - generuje tvary vzoru stavení
+C - generuje tvary jednotného čísla vzoru stavení (pro hromadná podstatná
+    jména)
+Q - generuje tvar s prázdnou koncovkou pro slova vzoru město
+R - generuje tvar s koncovkou -ě/-e pro slova vzoru město
+
+Pro slova vzoru město, která mají v 2. pádě množného čísla pravidelný tvar
+s prázdnou koncovkou se přidává příznak Q. Slova jako písmeno, semeno musí
+být uvedena s příznaky MQRI a navíc musí být zvlášť uveden tvar s koncovkou
+-e (písmene).
+
+                      Příznaky pro přídavná jména
+
+Univerzálním příznakem pro přídavná jména je příznak Y, který generuje tvary
+přídavných jmen podle vzorů mladý, jarní (lze použít i na druhý stupeň
+přídavných jmen jako mladší), otcův i matčin. Další příznaky se používají
+pro odvozování:
+
+K - odvozuje názvy vlastností - podstatná jména vzoru kost (mladý > mladost)
+C - odvozuje názvy vlastností s měkčením (exotický > exotičnost oproti
+    příznaku K: anglický > anglickost)
+R - odvozuje příslovce, dochází k měkčení -ký > -ce, -chý > -še, -hý > -ze,
+    -rý > -ře, -[dtnbpvm]ý > -[dtnbpvm]ě
+O - odvozuje příslovce, bez měkčení (dlouhý > dlouho)
+
+N - pouze předpona ne-
+E - pouze předpona nej-
+W - předpony ne-, nej- a nejne-
+
+Příznak Y lze použít i pro skloňování podstatných jmen vzorů hajný, průvodčí,
+hajná, jízdné, telecí i podstatných jmen yetti, pony, grizzly, regenschori
+a cizích slov na -oj, -ij (Tolstoj, Dostojevskij).
+
+
+                          Příznaky pro zájmena
+
+Y - generuje tvary substantivního skloňování podle vzorů mladý a jarní, dále
+    tvary pro slova typu kdo, co, můj, náš a ten (kromě samotného slova co).
+
+
+                          Příznaky pro slovesa
+
+A - z infinitivu generuje všechny tvary sloves kromě příčestí trpného
+    pro všechny vzory kromě vzorů krýt, dělat (volat), sázet a tnout
+    a některých slov první slovesné třídy se změnou kmene
+B - z infinitivu generuje všechny tvary sloves kromě příčestí trpného
+    pro vzor krýt, dále generuje tvary přítomného času a tvary
+    rozkazovacího způsobu z 1. nebo 3. osoby jednotného čísla - lze
+    použít pro vygenerování tvarů oznamovacího způsobu pro slovesa
+    první slovesné třídy se změnou kmene
+J - z infinitivu generuje všechny tvary sloves kromě příčestí trpného
+    pro vzory dělat (volat), sázet a tnout
+T - generuje z infinitivu tvary trpného rodu bez měkčení
+C - generuje z infinitivu tvary trpného rodu s měkčením
+    (přemoci > přemožen, sytit > sycen, hladit > hlazen, prosit > prošen,
+    vozit > vožen, myslit > myšlen, hustit > huštěn, opozdit > opožděn,
+    táhnout > tažen, nadchnout > nadšen, stihnout > stižen, svléknout
+    > svlečen, tisknout > tištěn, odemknout > odemčen)
+O - generuje z mužského rodu minulého či trpného příčestí další tvary
+X - generuje tvary přechodníku minulého z mužského rodu přechodníku minulého
+    nebo i z infinitivu
+N - generuje předponu ne-
+
+Díky existenci přechodníku budoucího se téměř ze všech sloves (dokonavých
+i nedokonavých) generují tvary přechodníku přítomného.
+
+Ve slovníku doposud chybí jakákoli informace o dokonavosti sloves. Tuto
+informaci bude nutné doplnit pro přidání příznaku X, který lze použít pouze
+pro dokonavá slovesa. Naopak z nedokonavých sloves je třeba vygenerovat
+přídavná jména typu dělající a přidat je do slovníku s příznaky YN.
+
+                          Příznaky pro číslovky
+
+Pro číslovky lze používat následující příznaky:
+
+ZQ - pro číslovky skloňované podle vzoru žena (nula, jednička, dvojka, ...)
+     a růže (dvojice, ...)
+I  - pro koncovku -i (pět, šest, ...)
+Y  - pro číslovky skloňované jako přídavná jména (první, druhý, ...)
+
+Ojediněle lze použít další příznaky pro slova, která se skloňují jako
+podstatná jména (sto, tisíc, milion), a příznaky N a F.
+
+                          Příznaky pro příslovce
+
+Příslovce je vhodné v nejvyšší možné míře odvozovat z přídavných jmen pomocí
+příznaků R a O. V některých případech jsou pro příslovce použitelné příznaky
+N, E a W popsané v kapitole Prefixy.
+
+                             Nesklonná slova
+
+Ojediněle lze použít některý z příznaků pro vygenerovaní jiného slova
+z nesklonného slova (příznak N).
+
+                             Pomocné skripty
+
+Pro ověřování, zda je slovo uvedeno ve slovníku a jaké tvary jsou generovány
+použitím určitých příznakům lze použít skript inter:
+
+sh inter              # Spuštění skriptu
+ispell.cz: husité
+ispell.cz:            (žádná odpověď) Slovo husité ve slovníku je
+ispell.cz: husiti
+husiti                Slovo husiti ve slovníku není
+ispell.cz: husita/PD
+husita                Výpis všech tvarů generovaných použití příznaků P a D
+husité                na slovo husita
+husitech
+husito
+husitou
+husitovi
+husitu
+husitů
+husitům
+husity
+ispell.cz: Ctrl-D    Ukončení skriptu
+
+Pro ulehčení práce s přiřazováním příznaků lze použít skript blemma, který
+se podle tvarů načtených slov pokusí převést tato slova do základního tvaru
+a přiřadit jim příznaky. Skript blemma nepoužívá žádný slovník a vychází
+pouze z tvarů slov, proto je jeho účinnost nízká (asi 40%) a dělá chyby,
+takže jeho výstup je nutné překontrolovat. :-(
+
+Příkaz
+
+    perl blemma -f soubor | sort -u
+
+vypíše na standardní výstup slova, kterým se podařilo přiřadit příznaky;
+příkaz
+
+    perl blemma -r soubor
+
+slova, u nichž se to nepodařilo.
+
+                          Nevyřešené problémy
+
+Některé problémy se pravděpodobně nedají rozumně řešit pomocí ispellu:
+
+- Některé zkratky (např., atd.) by měly být považovány za bezchybné, pouze
+  pokud je za nimi tečka.
+- Částice -li by měla být považována za bezchybnou, pouze je-li před ní
+  spojovník.
+- Povolit složeniny, jejichž první složka je tvořena slovy jako jsou
+  modro-, tmavo-, bledě-, krátko-, mnoho-, a druhá je přídavné jméno,
+  příslovce apod.. Možná lze nějakým způsobem použít volbu ~ u některého
+  příznaku. Přitom se nesmí povolit složeniny obecně.

@@ -1,0 +1,12 @@
+#!/bin/sh
+echo -n "ispell.cz: "
+while read line
+do
+    case $line in
+#        */*) echo $line | ispell -d czech -e | perl -pe 's/ /\n/g' ;;
+        */*) echo $line | munchlist -c czech.aff -l munch - ;;
+        *)   echo $line | ispell -d czech -l ;;
+    esac
+    echo -n "ispell.cz: "
+done
+echo

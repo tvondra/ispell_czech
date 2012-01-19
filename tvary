@@ -1,0 +1,10 @@
+#!/bin/sh
+while [ $# -ne 0 ]; do
+  if [ $1 = "-f" ]; then
+    shift
+    munchlist -c czech.aff -l munch $1
+  else
+    echo $1 | munchlist -c czech.aff -l munch -
+  fi
+  shift
+done

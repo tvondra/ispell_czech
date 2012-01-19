@@ -1,0 +1,1569 @@
+.\"
+.\" $Id: ispell.1X,v 1.91 2001/07/25 21:51:46 geoff Exp $
+.\"
+.\" Copyright 1992, 1993, 1999, 2001, Geoff Kuenning, Claremont, CA
+.\" All rights reserved.
+.\"
+.\" Redistribution and use in source and binary forms, with or without
+.\" modification, are permitted provided that the following conditions
+.\" are met:
+.\"
+.\" 1. Redistributions of source code must retain the above copyright
+.\"    notice, this list of conditions and the following disclaimer.
+.\" 2. Redistributions in binary form must reproduce the above copyright
+.\"    notice, this list of conditions and the following disclaimer in the
+.\"    documentation and/or other materials provided with the distribution.
+.\" 3. All modifications to the source code must be clearly marked as
+.\"    such.  Binary redistributions based on modified source code
+.\"    must be clearly marked as modified versions in the documentation
+.\"    and/or other materials provided with the distribution.
+.\" 4. Any web site or other electronic service that offers ispell for
+.\"    download or other electronic transfer as a separate entity, in
+.\"    either source or binary form, must also include a prominent statement
+.\"    indicating that information about ispell can be obtained from the
+.\"    following Web site URL:
+.\"	http://fmg-www.cs.ucla.edu/geoff/ispell.html
+.\"    If the offering service supports hyperlinks, the aforementioned
+.\"    Web site must also be offered as a hyperlink.  Condition #4 does
+.\"    not apply if ispell is offered only as part of a larger, aggregated
+.\"    product such as a word processor or packaged operating system.
+.\" 5. The name of Geoff Kuenning may not be used to endorse or promote
+.\"    products derived from this software without specific prior
+.\"    written permission.
+.\"
+.\" THIS SOFTWARE IS PROVIDED BY GEOFF KUENNING AND CONTRIBUTORS ``AS IS'' AND
+.\" ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+.\" IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+.\" ARE DISCLAIMED.  IN NO EVENT SHALL GEOFF KUENNING OR CONTRIBUTORS BE LIABLE
+.\" FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+.\" DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+.\" OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+.\" HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+.\" LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+.\" OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+.\" SUCH DAMAGE.
+.\"
+.\" $Log: ispell.1X,v $
+.\" Revision 1.91  2001/07/25 21:51:46  geoff
+.\" Minor license update.
+.\"
+.\" Revision 1.90  2001/07/23 20:24:03  geoff
+.\" Update the copyright and the license.
+.\"
+.\" Revision 1.89  2001/07/23 19:36:49  geoff
+.\" Document that -w doesn't work with /
+.\"
+.\" Revision 1.88  2000/08/24 06:48:40  geoff
+.\" Document correct_verbose_mode.
+.\"
+.\" Revision 1.87  1999/01/07 01:22:40  geoff
+.\" Update the copyright.
+.\"
+.\" Revision 1.86  1999/01/05  20:40:26  geoff
+.\" Improve the documentation of -F
+.\"
+.\" Revision 1.85  1999/01/03  01:46:31  geoff
+.\" Document the -F (external deformatter) switch.
+.\"
+.\" Revision 1.84  1998/07/12  20:42:15  geoff
+.\" Document the -k switch and associated environment variables.  Fix a
+.\" couple of places where ispell wasn't italicized.
+.\"
+.\" Revision 1.83  1995/11/08  05:09:12  geoff
+.\" Document the new ispell-4-like interactive mode.
+.\"
+.\" Revision 1.82  1995/11/08  04:53:34  geoff
+.\" Change the HTML-mode documentation to reflect the compatibility
+.\" improvements and flag renaming I did.
+.\"
+.\" Revision 1.81  1995/10/25  04:05:20  geoff
+.\" Documentation for html-mode added by Gerry Tierney 10/14/1995.
+.\"
+.\" Revision 1.80  1995/01/08  23:23:31  geoff
+.\" Document the new personal-dictionary behavior (dictionary named after
+.\" the hash file is preferred).
+.\"
+.\" Revision 1.79  1994/10/25  05:46:02  geoff
+.\" Document the new DICTIONARY variable, and improve the documentation of
+.\" the -d flag.
+.\"
+.\" Revision 1.78  1994/09/16  05:06:58  geoff
+.\" Make it clear that the + command doesn't change the string-character
+.\" type.
+.\"
+.\" Revision 1.77  1994/04/27  01:50:35  geoff
+.\" Remove the bug about the tex parser getting confused by \endxxx.
+.\"
+.\" Revision 1.76  1994/03/21  01:54:08  geoff
+.\" Document the '&' command in -a mode.
+.\"
+.\" Revision 1.75  1994/03/15  06:24:26  geoff
+.\" Document the changes to the +/-/~ commands and the -T switch.
+.\"
+.\" Revision 1.74  1994/01/25  07:11:39  geoff
+.\" Get rid of all old RCS log lines in preparation for the 3.1 release.
+.\"
+.\"
+.TH ISPELL 1 local
+.do hla cs
+.do hpf hyphen.cs
+.SH JMÉNO
+ispell, buildhash, munchlist, findaffix, tryaffix, icombine, ijoin \-
+Interaktivní korektor pøeklepù
+.SH POU®ITÍ
+.B ispell
+.RI [ spoleèné-volby ]
+.RB [ \-M | \-N ]
+.RB [ \-L
+\fIøádkù\fP]
+.RB [ \-V ]
+soubory
+.br
+.B ispell
+.RI [ spoleèné-volby ]
+.B \-l
+.br
+.B ispell
+.RI [ spoleèné-volby ]
+.RB [ \-f
+soubor]
+.RB [ \-s ]
+.RB [ \-a | \-A ]
+.br
+.B ispell
+.RB [ \-d
+.IR soubor ]
+.RB [ \-w
+.IR znaky ]
+.B \-c
+.br
+.B ispell
+.RB [ \-d
+.IR soubor ]
+.RB [ \-w
+.IR znaky ]
+.BR \-e [ úroveò ]
+.br
+.B ispell
+.RB [ \-d
+.IR soubor ]
+.B \-D
+.br
+.B ispell
+.BR \-v [ v ]
+.IP \fIspoleèné-volby\fP:
+.RB [ \-t ]
+.RB [ \-n ]
+.RB [ \-H ]
+.RB [ \-b ]
+.RB [ \-x ]
+.RB [ \-B ]
+.RB [ \-C ]
+.RB [ \-P ]
+.RB [ \-m ]
+.RB [ \-S ]
+.RB [ \-d
+.IR soubor ]
+.RB [ \-p
+.IR soubor ]
+.RB [ \-w
+.IR znaky ]
+.RB [ \-W
+.IR n ]
+.RB [ \-T
+.IR typ ]
+.RB [ \-k\fIjméno\fP
+.IR seznam ]
+.RB [ \-F
+.IR program ]
+.PP
+.B buildhash
+.RB [ \-s ]
+.I
+dict-soubor afix-soubor hash-soubor
+.br
+.B buildhash
+.B \-s
+.I
+poèet afix-soubor
+.if n .TP 10
+.if t .PP
+.B munchlist
+.RB [ \-l
+.IR aff-soubor ]
+.RB [ \-c
+.IR conv-soubor ]
+.RB [ \-T
+.IR sufix ]
+.if n .br
+.RB [ \-s
+.IR hash-soubor ]
+.RB [ \-D ]
+.RB [ \-v ]
+.RB [ \-w
+.IR znaky ]
+.RI [ soubory ]
+.if n .TP 10
+.if t .PP
+.B findaffix
+.RB [ \-p | \-s ]
+.RB [ \-f ]
+.RB [ \-c ]
+.RB [ \-m
+.IR min ]
+.RB [ \-M
+.IR max ]
+.RB [ \-e
+.IR elim ]
+.if n .br
+.RB [ \-t
+.IR tabchar ]
+.RB [ \-l
+.IR min-poèet ]
+.RI [ soubory ]
+.PP
+.B tryaffix
+.RB [ \-p | \-s]
+.RB [ \-c ]
+.I expandovaný-soubor
+.IR afix [ +pøídavek ]
+...
+.PP
+.B icombine
+.RB [ \-T
+.IR typ ]
+.RI [ aff-soubor ]
+.PP
+.B ijoin
+.RB [ \-s | \-u ]
+.I volby-pro-join
+.I soubor1
+.I soubor2
+.SH POPIS
+.PP
+Korektor pøeklepù
+.I ispell
+vychází z programu
+.I spell
+pro ITS, který byl na systému Twenex pøejmenován na
+.IR ispell .
+Nejèastìji se pou¾ívá pro interaktivní kontrolu
+obsahu souboru pøíkazem "ispell jméno_souboru".
+Pøi ní
+.I ispell
+pøeskakuje v¹echna jemu známá slova; slovo, které nemá ve slovníku,
+pova¾uje za pøeklep, zobrazí je v horní èásti obrazovky, a umo¾ní
+u¾ivateli jeho opravu.
+Na obrazovce se zobrazuje i èást kontrolovaného souboru - øádek
+obsahující neznámé slovo a øádek pøedchozí. Je-li pou¾itý terminál
+schopen zvýrazòovat text inverzním zobrazením, bude neznámé slovo
+zvýraznìno.
+Jsou-li ve slovníku "podobná slova" (taková, která se od neznámého
+slova odli¹ují zmìnou jediného písmene, vypu¹tìním nebo pøidáním
+jednoho písmene, pøehozením dvojice písmen, anebo lze-li vlo¾ením
+mezery, pomlèky èi spojovníku rozdìlit neznámé slovo na dvì slova
+uvedená ve slovníku), budou zobrazena jako mo¾né opravy na
+následujících øádcích. Kromì nich
+.I ispell
+zobrazuje i takzvané odhady. Odhad je zpùsob, jak získat neznámé slovo
+z nìkterého základního tvaru uvedeného ve slovníku pou¾itím libovolných
+odvozovacích pravidel ze souboru afixù (za bezchybná jsou pova¾ována
+slova získaná výhradnì pou¾itím pravidel povolených pro daný základní
+tvar). Navrhované opravy jsou oèíslovány, odhady jsou oznaèeny otazníky.
+Pokud je neznámé slovo chybné, mù¾e jej u¾ivatel opravit vybráním jedné
+z navrhovaných oprav nebo napsáním správného slova. Správné slovo, které
+.I ispell
+nezná, mù¾e u¾ivatel zaøadit do svého osobního slovníku. Po¾adovaná
+akce se vybere jedním z následujících jednopísmenných pøíkazù
+(mohou být zadány velkými i malými písmeny):
+.PP
+.RS
+.IP mezera
+Tento výskyt neznámého slova neopravovat.
+.IP 0-\fIn\fR
+Slovo nahradit navrhovanou opravou se zadaným èíslem.
+.IP R
+Replace - ruènì zadat opravu chybného slova.
+.IP A
+Accept - pova¾ovat slovo za správné do konce tohoto spu¹tìní programu
+.IR ispell .
+.IP I
+Insert - slovo pova¾ovat za správné a vlo¾it jej (pøesnì v uvedeném tvaru,
+vèetnì pou¾ití velkých písmen) do osobního slovníku.
+.IP U
+Uncapitalized - slovo pova¾ovat za správné a pøevedené na malá písmena
+jej vlo¾it do osobního slovníku.
+.IP L
+Look up - zkontrolovat, zda se slovo vyskytuje v systémovém slovníku
+(urèeném pøi pøekladu programu
+.I ispell
+volbou WORDS).
+.IP X
+eXit - zapsat aktuální stav opravovaného souboru na disk a zahájit
+zpracování pøípadného dal¹ího souboru.
+.IP Q
+Quit - ukonèit program
+.I ispell
+a opravovaný soubor ponechat beze zmìn.
+.IP !
+Vyvolat interpret pøíkazù (návrat pøíkazem exit).
+.IP ^L
+Pøekreslit obrazovku.
+.IP ^Z
+Suspendovat ispell (pokraèovat pøíkazem fg).
+.IP ?
+Zobrazit nápovìdu.
+.RE
+.PP
+Podle hodnoty volby MINIMENU zadané pøi pøekladu programu
+.I ispell
+mù¾e být ve spodní èásti obrazovky zobrazen øádek se seznamem
+vý¹e uvedených pøíkazù. Jeho zobrazení lze vynutit volbou
+.BR \-M .
+Naopak volbou
+.B \-N
+se zobrazení této nápovìdy potlaèí.
+.PP
+Volbou
+.B \-L
+lze stanovit, kolik øádkù kontrolovaného souboru se má pøi opravování
+zobrazovat. Implicitní hodnota je vypoèítána jako urèitá èást
+velikosti obrazovky. Poèet øádkù je omezen systémovì závislým limitem.
+.PP
+Pøi pou¾ití volby
+.B \-V
+budou jiné ne¾ tisknutelné ASCII znaky zobrazovány ve stylu
+pøíkazu "cat -v", a to i v pøípadì, ¾e
+.I ispell
+na va¹em systému tyto znaky pova¾uje za zobrazitelné ISO Latin-n znaky.
+Tato volba mù¾e poslou¾it na star¹ích terminálech. Bez ní bude
+.I ispell
+osmibitové znaky povolené pro pøíslu¹ný formát souboru zobrazovat jak
+jsou.
+.PP
+V "normálním" re¾imu nebo pøi pou¾ití voleb
+.BR \-l ,
+.B \-a
+èi
+.B \-A
+a v interaktivním re¾imu (viz ní¾e) lze v pøíkazovém øádku pou¾ít také
+následující spoleèné volby:
+.RS
+.IP \fB\-t\fR
+Vstupní soubor je ve formátu TeX nebo LaTeX.
+.IP \fB\-n\fR
+Vstupní soubor je ve formátu nroff/troff.
+.IP \fB\-H\fR
+Vstupní soubor je ve formátu SGML/HTML.
+(Tato volba by se mìla jmenovat
+.BR \-s ,
+ale ta byla v minulosti pou¾ita pro jiný úèel.)
+.IP \fB\-b\fR
+Bude vytvoøen zálo¾ní soubor se jménem vzniklým pøidáním pøípony ".bak"
+ke jménu vstupního souboru.
+.IP \fB\-x\fR
+Zálo¾ní soubor bude smazán.
+.IP \fB\-B\fR
+Spojená slova budou pova¾ována za povolené slo¾eniny.
+.IP \fB\-C\fR
+Spojená slova budou pova¾ována za pøeklep (chybìjící mezeru).
+.IP \fB\-P\fR
+Nebudou se generovat zvlá¹tní kombinace koøen/afix.
+.IP \fB\-m\fR
+Budou se generovat kombinace koøen/afix neuvedené ve slovníku.
+.IP \fB\-S\fR
+Seznam odhadù bude tøídìn podle pravdìpodobné správnosti.
+.IP "\fB\-d\fR soubor"
+Jméno alternativního ha¹ovaného souboru se slovníkem
+(pøíponu .hash není tøeba uvádìt). Napøíklad pomocí
+.B "\-d czech"
+lze v èeské instalaci vybrat èeský slovník.
+.IP "\fB\-p\fR soubor"
+Urèuje jméno souboru s alternativním osobním slovníkem.
+.IP "\fB\-w\fR znaky"
+Udává, které dal¹í znaky mohou být èástí slova.
+.IP "\fB\-W\fR n"
+Udává maximální délku slov, která jsou automaticky pova¾ována za správná.
+.IP "\fB-T\fR typ"
+Pøedpokládá, ¾e v¹echny soubory jsou zadaného typu.
+.RE
+.PP
+Volby
+.BR \-H ,
+.B \-n
+a
+.B \-t
+urèují, zda
+.I ispell
+oèekává vstupní soubor ve formátu HTML
+.RB ( \-H ),
+nroff/troff
+.RB ( \-n )
+nebo TeX/LaTeX
+.RB ( \-t ).
+(Implicitní hodnota je urèena volbou DEFTEXFLAG pøi instalaci, ale
+obvykle je z historických dùvodù nastavena na re¾im nroff/troff.)
+Pokud není zmìnìna nìkterou z voleb pro nastavení formátu, bude
+pøi zpracování souboru, jeho¾ jméno má pøíponu ".tex", nastavena
+na TeX/LaTeX a pøi zpracování souboru, jeho¾ jméno má pøíponu
+".html" nebo ".htm" na HTML.
+V re¾imu HTML nebudou kontrolovány HTML znaèky mezi <>. Budou v¹ak
+kontrolovány hodnoty atributù "ALT=" (pokud okolo rovnítka nejsou
+mezery).
+.PP
+V re¾imu pro TeX/LaTeX
+.I ispell
+pøeskakuje znaky za zpìtnými lomítky ("\e"), dokud nenalezne mezeru
+nebo oddìlovaè TeXu/LaTeXu. Jisté pøíkazy obsahují argumenty, které
+nemají být kontrolovány (napøíklad návì¹tí a jména referencí v pøíkazu
+\ecite), proto¾e mohou obsahovat libovolné neslovní argumenty. Kontrola
+pøeklepù je také potlaèena v matematickém re¾imu.
+Napøíklad v textu
+.PP
+.RS
+\echapter {Tato kpitola}
+\ecite{SCH86}
+.RE
+.PP
+.I ispell
+oznaèí za chybné slovo "kpitola" ale nikoli "SCH".
+Volba
+.B \-t
+nerozpoznává komentáøové znaky "%" TeXu, tak¾e jsou kontrolovány
+i komentáøe. Není-li dodr¾ena správná syntaxe, mohou být omylem
+kontrolovány i pøíkazy LaTeXu. Také argumenty øídce pou¾ívaných
+pøíkazù a nìkteré volitelné argumenty mohou být nìkdy kontrolovány
+omylem. Bibliografie nebude kontrolována, jestli¾e byl
+.I ispell
+byl pøelo¾en s definovanou volbou
+.BR IGNOREBIB .
+Nikdy nebudou kontrolovány jména referencí.
+.PP
+Reference pro bibliografický systém
+.I tib
+tvoøené textem mezi ``[.'' nebo ``<.'' a ``.]'' nebo ``.>'',
+budou v re¾imu TeX/LaTeX v¾dy ignorovány.
+.PP
+Pøi pou¾ití voleb
+.B \-b
+nebo
+.B \-x
+vytvoøí
+.I ispell
+pro ka¾dý kontrolovaný soubor zálo¾ní (.bak) kopii obsahující
+pùvodní text pøed kontrolou pøeklepù. Pokud pøi práci se souborem
+dojde k chybì, bude mo¾né obnovit pùvodní dokument ze zálo¾ního
+souboru - a to i pøi pou¾ití volby
+.BR \-x ,
+která urèuje, ¾e po bezchybném skonèení se má zálo¾ní soubor smazat.
+Implicitní nastavení této vlastnosti je urèeno hodnotou konstanty
+DEFNOBACKUPFLAG pøi pøekladu.
+.PP
+Volby
+.B \-B
+a
+.B \-C
+stanovují, jak bude
+.I ispell
+zpracovávat spojená slova, jako "aletaké" místo "ale také".
+S volbou
+.B \-C
+budou taková slova pova¾ována za chybná, a
+.I ispell
+bude vypisovat jejich variace s vlo¾enými mezerami nebo pomlèkami
+jako mo¾né opravy.
+Je-li zadána volba
+.BR \-B ,
+budou spojená slova pova¾ována za povolené slo¾eniny, pokud jsou obì
+komponenty ve slovníku, a ka¾dá komponenta je pøinejmen¹ím tak dlouhá
+jako jazykovì závislé minimum (implicitnì 3 znaky). Volba mù¾e být
+u¾iteèná pro jazyky jako je nìmèina a nor¹tina, kde se mnoho slo¾ených
+slov vytváøí prostým zøetìzením. (Slo¾eniny ze tøí nebo více
+základních slov v¹ak budou stále pova¾ovány za chybu). Implicitní
+hodnota pro tuto volbu je jazykovì závislá; ve vícejazyèných
+instalacích mù¾e záviset na zvoleném slovníku.
+.PP
+Volby
+.B \-P
+a
+.B \-m
+urèují, kdy bude
+.I ispell
+pro slova, která nejsou ve slovníku, zobrazovat odhadnuté kombinace
+koøen+afix (polo¾ky tvaru ??: Bo¾etìch+ovi v seznamu nabízených oprav).
+Správná slova pak mù¾ete pøidat do svého osobního slovníku.
+S volbou
+.B \-P
+budou tyto odhady zobrazovány pouze v pøípadì, ¾e neexistuje ¾ádná jiná
+oprava; s volbou
+.B \-m
+budou zobrazovány v¾dy. To mù¾e být u¾iteèné, pokud slovník obsahuje
+omezený seznam slov, nebo pokud slovùm v seznamu nejsou pøiøazeny
+v¹echny správné afixy. Pøi pou¾ívání této volby v¹ak musíte být opatrní,
+proto¾e mù¾e generovat chybná slova.  Implicitní hodnota je urèena
+pou¾itým slovníkem.
+.PP
+Volba
+.B \-S
+potlaèuje implicitní tøídìní seznamu oprav slova. Tím se v nìkterých
+pøípadech mù¾e zvý¹it pravdìpodobnost, ¾e správné slovo bude na zaèátku
+seznamu.
+.PP
+Pomocí volby
+.B \-d
+lze zadat jméno souboru s jiným ha¹ovaným slovníkem - napøíklad pro jiný
+jazyk. Pokud zadané jméno souboru neobsahuje znak "/", bude
+.I ispell
+soubor hledat ve stejném knihovním adresáøi, jako je soubor s implicitním
+slovníkem. Pokud chcete pou¾ít slovník umístìný v aktuálním adresáøi, je
+nutné zadat "-d ./slovnik.hash". V souèasné verzi programu
+.I ispell
+ji¾ nelze jako slovník pou¾ít soubor
+.IR /dev/null ,
+proto¾e slovník musí obsahovat tabulku afixù. Jestli¾e potøebujete
+efektivnì prázdný slovník, vytvoøte seznam obsahující jedinou polo¾ku
+s nepravdìpodobným øetìzcem (napø. "qqqqq").
+.PP
+Volba
+.B \-p
+se pou¾ívá pro zadání alternativního osobního slovníku. Jestli¾e
+jméno souboru nezaèíná znakem "/", pøedøadí se mu $HOME. Stejným
+zpùsobem definuje jméno osobního slovníku promìnná prostøedí WORDLIST.
+Volba z pøíkazového øádku má pøednost pøed nastavením pomocí
+WORDLIST.
+Jestli¾e není pou¾ita ani volba
+.BR \-p ,
+ani není nastavena promìnná prostøedí WORDLIST, bude
+.I ispell
+hledat osobní slovník v aktuálním adresáøi a poté v $HOME; pokud
+ani jeden nebude nalezen, vytvoøí slovník v $HOME. Jméno souboru
+s u¾ivatelským slovníkem je implicitnì vytvoøeno pøedøazením
+øetìzce ".ispell_" pøed jméno základního slovníku. Pokud
+napøíklad pou¾íváte anglický slovník, bude vá¹ osobní slovník
+pojmenován ".ispell_english". Pokud ov¹em existuje
+soubor ".ispell_words", bude pou¾íván jako osobní slovník bez
+ohledu na zvolený hlavní slovník. Dùvodem tohoto chování je zpìtná
+kompatibilita.
+.PP
+Jestli¾e není zadána volba
+.BR \-p ,
+bude
+.I ispell
+hledat osobní slovník jak v aktuálním adresáøi, tak v domovském
+adresáøi. Existují-li slovníky v obou, pou¾ije se obsah obou.
+Pøi pøidávání slov do osobního slovníku budou slova pøednostnì
+pøidávána do slovníku v aktuálním adresáøi. Pokud neexistuje,
+budou pøidávána do slovníku v domovském adresáøi.
+.PP
+Pomocí volby
+.B \-w
+lze zadat, které nepísmenné znaky mají být pova¾ovány za znaky
+povolené ve slovech. Napøíklad
+.B \-w
+"&" umo¾ní, aby "AT&T" bylo pova¾ováno za jedno slovo. V mnoha
+technických dokumentech mù¾e být u¾iteèné takto pøidat znak
+podtr¾ítko. Tato volba
+také umo¾òuje velmi primitivní podporu 8-bitových mezinárodních
+znakù. Netisknutelné znaky mohou být zadány zpùsobem obvyklým 
+v jazyce C - pomocí zpìtného lomítka následovaného osmièkovým
+kódem znaku; napø. "\e014" znamená znak form feed. Kódy znakù
+mohou být zadány také v desítkové soustavì; pak je nutné pøed
+kódem zapsaným jednou a¾ tøemi èíslicemi pou¾ít znak "n".
+Pokud byste napøíklad chtìli umo¾nit, aby se ve slovech mohly
+vyskytovat ASCII znaky BEL (zvonek) a FF (nová stránka) (to je
+samozøejmì nesmysl slou¾ící pouze pro ilustraci), bylo by
+mo¾né pou¾ít
+.PP
+.RS
+n007n012
+.RE
+.PP
+Jiné èíslice ne¾ tøi následující znak "n" jsou obyèejnými èíslicemi.
+Ani pou¾ití písmene "n" pro tento úèel nezpùsobuje ¾ádné problémy,
+proto¾e písmena bez diakritiky jsou v¾dy pova¾ována za legální znaky,
+které není nutné povolovat pomocí 
+.BR \-w .
+Program
+.I ispell
+se obvykle pou¾ívá pro zpracování obsahu souboru, tak¾e implicitní
+zpracovávání 8-bitových znakù nepùsobí potí¾e. Je-li ale vstupní text
+naèítán z terminálu s pou¾itím volby
+.BR -l ,
+budou problémy, pokud je stty nastaveno tak, ¾e osmý bit je paritní.
+.PP
+Nìkteré znaky nelze pou¾ít jako argument volby
+.B \-w
+- jmenovitì znak pro oznaèení jazyka (definovaný v souboru afixù -
+obvykle "/").
+Volba
+.B \-W
+stanovuje maximální délku slov, která
+.I ispell
+bude v¾dy pova¾ovat za správná. Implicitní hodnota je 1, tak¾e
+.I ispell
+implicitnì jednoznaková slova nekontroluje a pova¾uje je za správná.
+(Ve skuteènosti je implicitní hodnota této volby urèena parametrem
+MINWORD, který lze zadat pøi pøekladu, tak¾e ve va¹í instalaci mù¾e
+být jiná.) Jestli¾e chcete, aby byla kontrolována v¹echna slova bez
+ohledu na délku, musíte pou¾ít "\fB\-W 0\fR". Pokud naopak vá¹
+dokument obsahuje velké mno¾ství tøípísmenných zkratek, které nejsou
+ve slovníku, pou¾ijte "\fB\-W 3\fR".
+Bez ohledu na nastavení této volby bude
+.I ispell
+jako mo¾né opravy generovat pouze slova, které jsou ve slovníku.
+Jinak by byl seznam doporuèovaných oprav pøíli¹ dlouhý. Pou¾ívání
+této volby mù¾e být samozøejmì velmi nebezpeèné, proto¾e chyby
+v krátkých slovech budou ignorovány. Pokud ji pou¾íváte, je vhodné
+udìlat poslední kontrolu dokumentu bez ní, aby byly odhaleny i chyby
+v krátkých slovech.
+.PP
+Volba
+.B \-T
+.I typ
+se pou¾ívá pro zadání implicitní volby stringchars, tj. zpùsobu, jak
+jsou v dokumentu zakódovány ne-ASCII znaky pomocí øetìzcù známých
+napøíklad z programu TeX (napø. \\'a pro znak "a s èárkou"). Tato volba
+má pøednost pøed implicitním typem odvozeným ze jména souboru. Argument
+.I typ
+mù¾e být buï jedno z unikátních jmen definovaných v souboru afixù
+(napø.
+.BR nroff )
+nebo pøípona souboru vèetnì teèky (napø.
+.BR .tex ).
+Není-li pou¾ita volba
+.B \-T
+a typ nelze urèit ze jména souboru, bude pou¾it implicitní nastavení
+stringchars podle souboru afixù.
+.PP
+Volba
+.B \-k
+slou¾í ke zlep¹ení chování ispellu pøi zpracování nìkterých formátù.
+Argument
+.I jméno
+udává jméno sady klíèových slov pro zpracování formátu (viz ní¾e) a
+.I seznam
+je seznam jednoho nebo více klíèových slov, které mají být zpracovávány
+speciálním zpùsobem.
+Pokud
+.I seznam
+zaèíná znakem "+" (plus), bude seznam pøidán k existujícím klíèovým slovùm.
+Jinak bude pou¾it jako seznam klíèových slov. Napøíklad
+.B "\-ktexskip1 +bibliographystyle"
+pøidá "bibliographystyle" do TeXového seznamu texskip1. Podobnì
+.B "\-khtmlignore pre,strong"
+nahradí HTML seznam ignore slovy "pre" a "strong".
+Lze pou¾ívat následující seznamy:
+.IP texskip1
+- pøíkazy TeXu/LaTeXu, které mají jeden argument, který nemá být
+kontrolován - napøíklad "bibliographystyle". Implicitní hodnota je
+"end", "vspace", "hspace", "cite", "ref", "parbox", "label", "input",
+"nocite", "include", "includeonly", "documentstyle", "documentclass",
+"usepackage", "selectlanguage", "pagestyle", "pagenumbering",
+"hyphenation", "pageref" a "psfig", plus v nìkterých instalacích
+"bibliography".
+V klíèových slovech se rozli¹ují malá a velká písmena.
+.IP texskip2
+- pøíkazy TeXu/LaTeXu, které mají dva argumenty, které nemají být
+kontrolovány - napøíklad "setlength". Implicitní hodnota je
+"rule", "setcounter", "addtocounter", "setlength", "addtolength" a
+"settowidth".
+V klíèových slovech se rozli¹ují malá a velká písmena.
+.IP htmlignore
+- párové HTML znaèky, které ohranièují text, který nemá být kontrolován.
+Implicitní hodnota je "code", "samp", "kbd", "pre", "listing" a "address".
+V klíèových slovech se nerozli¹ují malá a velká písmena.
+Pamatujte, ¾e text uvnitø HTML znaèek jako je "HREF=" se normálnì
+nekontroluje.
+.IP htmlcheck
+- parametry, jejich¾ hodnoty mají být kontrolovány i uvnitø HTML znaèek.
+Implicitní hodnota je "alt", tak¾e hodnota parametru "ALT=" ve znaèce
+IMG bude kontrolována.
+V klíèových slovech se nerozli¹ují malá a velká písmena.
+.PP
+V¹echny vý¹e uvedené seznamy klíèových slov mohou být modifikovány také
+pomocí promìnných prostøedí, jejich¾ jména jsou stejná jako jména seznamù
+(ale velkými písmeny - napø. TEXSKIP1).
+Volba
+.B \-k
+má pøednost (nebo modifikuje) hodnoty zadané promìnnými prostøedí a
+promìnné prostøedí mají pøednost (nebo modifikují) zabudované
+implicitní hodnoty.
+.PP
+Volba
+.B \-F
+udává jméno externího programu, který odstraòuje znaèky ze souboru.
+Program musí èíst data ze standardního vstupu a zapisovat na standardní
+výstup.
+Program
+.I musí
+produkovat jeden znak výstupu pro jeden znak vstupu, jinak
+.I ispell
+ztratí synchronizaci a po¹kodí obsah souboru. "Bílé znaky"
+(mezery, tabelátory, znaky konce øádku, atd.) a øetìzce, ve kterých mají
+být kontrolovány pøeklepy, musí být zkopírovány na výstup beze zmìn.
+Èásti, ve kterých nemají být kontrolovány pøeklepy, musí být zmìnìny
+na mezery nebo znaky, které nejsou pova¾ovány za souèást slov.
+Napøíklad program pro odstraòování znaèek z HTML souboru mù¾e mìnit
+v¹echny HTML znaèky a text ohranièený znaèkami jako "code" nebo "kbd"
+na mezery.
+.PP
+Volba
+.B \-F
+je preferovaným zpùsobem pro odstraòování znaèek ze souborù pro ispell
+a pozdìj¹í verze mohou podporovat pouze ji.
+.PP
+Pokud je
+.I ispell
+vyvolán bez parametrù a pøepínaèù, pobì¾í v interaktivním re¾imu,
+který slou¾í pro kontrolování jednotlivých slov.
+Program vypisuje výzvu "word:" a na zadání slov odpovídá buï "ok"
+(s pøípadným komentáøem) nebo "not found" (nenalezeno) nebo
+"how about" (a co napøíklad) následovaným seznamem návrhù opravy.
+.PP
+Volba
+.B \-l
+(list) slou¾í pro vypsání seznamu neznámých slov z textu èteného ze
+standardního vstupu.
+.PP
+Volba
+.B \-a
+slou¾í pro komunikaci jiných programù s programem
+.I ispell
+pomocí roury. V tomto re¾imu
+.I ispell
+vypí¹e jednoøádkovou zprávu o své verzi, a pak zahájí ètení øádkù ze
+vstupu. Pro ka¾dé vstupní slovo bude na standardní výstup vypsán jeden
+øádek. Pokud se jedná o tvar slova, který je pøímo uveden v hlavním
+nebo v osobním slovníku, bude øádek obsahovat pouze znak '*'. Pokud lze
+slovo odvodit pomocí pravidel ze souboru afixù (tj. slovo by v normálním
+re¾imu bylo pova¾ováno za bezchybné), bude øádek obsahovat znak '+',
+mezeru a základní tvar slova. Pokud bylo slovo odvozeno zøetìzením dvou
+slov (povoleného volbou
+.BR \-C ),
+pak øádek bude obsahovat pouze znak '\-'.
+.PP
+Jestli¾e slovo ve slovníku není, ale jsou tam podobná slova, pak øádek
+bude obsahovat znak '&', mezeru, ¹patnì napsané slovo, mezeru, poèet
+podobných slov, pozici slova na øádku (0 znamená, ¾e slovo bylo na
+zaèátku øádku), dvojteèku, dal¹í mezeru a seznam podobných správných
+slov oddìlených v¾dy èárkou a mezerou. Za podobnými slovy následují
+odhady (které lze rozpoznat od podobných slov pouze tím, ¾e skuteèný
+poèet slov je vìt¹í, ne¾ kolik bylo udáno), tj. zpùsoby, jak by mohlo
+být slovo vytvoøeno pøidáním (ve slovníku pro daný základní tvar
+nepovolených) afixù ke známému základnímu tvaru. Jednotlivé odhady
+jsou také oddìleny èárkou a mezerou. Jestli¾e jsou v seznamu pouze
+odhady a ¾ádná podobná slova,
+bude formát øádku stejný, ale místo úvodního znaku '&' bude pou¾it
+znak '?' (a poèet podobných slov bude v¾dy nula). Doporuèovaná odvození
+v odhadech mají následující tvar:
+.PP
+.RS
+[prefix+] koøen [-prefix] [-sufix] [+sufix]
+.RE
+.PP
+(napø. "re+fry-y+ies" dává "refries"); ka¾dý nepovinný
+.I prefix
+a
+.I sufix
+je øetìzec.
+V ka¾dém podobném slovì nebo odhadu jsou pou¾ita velká písmena stejným
+zpùsobem jako ve vstupním slovì, pokud není takové pou¾ití velkých písmen
+zakázáno; jinak jsou v podobných slovech pou¾ita velká písmena podle
+slovníku.
+.PP
+Jestli¾e se slovo ve slovníku nevyskytuje, ani v nìm nejsou podobná
+slova, pak øádek bude obsahovat znak '#', mezeru, ¹patnì napsané slovo,
+mezeru a pozici slova na øádku (0 znamená, ¾e slovo bylo na zaèátku øádku).
+.PP
+Za posledním vypsaným záznamem bude jeden prázdný øádek, který oznaèuje, ¾e
+.I ispell
+dokonèil zpracování vstupního øádku.
+.PP
+Formát výstupních øádkù lze shrnout takto:
+.PP
+.RS
+.IP Slovo:
+.IP Správné:
+*
+.IP Koøen:
++ <koøen>
+.IP Slo¾enina:
+\-
+.IP ©patné:
+& <pùvodní> <poèet> <posunutí>: <podobné>, <podobné>, ..., <odhad>, ...
+.IP Odhad:
+? <pùvodní> 0 <posunutí>: <odhad>, <odhad>, ...
+.IP Nenalezeno:
+# <pùvodní> <posunutí>
+.RE
+.PP
+Pokud by anglický slovník napøíklad obsahoval pouze slova "fray", "Frey",
+"fry" a "refried", na pøíkaz
+"echo 'frqy refries' | ispell -a -C -d ./fray.hash" by
+.I ispell
+odpovìdìl
+.RS
+.nf
+@(#) International Ispell Version 3.1.20 10/10/95
+& frqy 3 0: fray, Frey, fry
+& refries 1 5: refried, re+fry-y+ies
+.fi
+.RE
+.PP
+Re¾im s volbou
+.B \-a
+mù¾e být vhodný i pro interaktivní pou¾ití, napøíklad pokud
+chcete zjistit, jak se má psát jedno konkrétní slovo.
+.PP
+Volba
+.B \-A
+funguje stejnì jako volba
+.BR \-a ,
+ale pokud øádek zaèíná øetìzcem "&Include_File&", zbytek
+øádku je pova¾ován za jméno souboru, jeho¾ obsah má být vlo¾en.
+Po zpracování vlo¾eného souboru bude
+.I ispell
+pokraèovat ve zpracování pùvodního souboru. Maximální hloubka vnoøení
+vlo¾ených souborù je 5. Øetìzec pou¾itý pro vlo¾ení souboru mù¾e být
+zmìnìn pomocí promìnné prostøedí
+.B INCLUDE_STRING
+(znaky '&' musí být obsa¾eny).
+.PP
+V re¾imu
+.B \-a
+pøijímá
+.I ispell
+øádky obsahující jediné slovo s pøedøazeným nìkterým z následujících
+znakù: '*', '&', '@', '+', '-', '~', '#', '!', '%', '`' nebo '^'.
+Øádek zaèínající znakem '*' pøikazuje programu
+.IR ispell ,
+aby vlo¾il slovo do u¾ivatelského slovníku (jako interaktivní pøíkaz I);
+øádek zaèínající znakem '&' pøikazuje
+vlo¾it slovo pøevedené na malá písmena do u¾ivatelského slovníku
+(jako interaktivní pøíkaz U);
+øádek zaèínající znakem '@' zpùsobí, ¾e program
+.I ispell
+bude toto slovo pøí¹tì pøijímat (jako pøíkaz A);
+øádek zaèínající znakem '+' následovaným (bez mezery) øetìzcem
+.B tex
+nebo
+.B nroff
+zpùsobí, ¾e
+.I ispell
+bude dal¹í vstup zpracovávat podle syntaxe zadaného formátu;
+øádek obsahující pouze znak '+' pøepne
+.I ispell
+do re¾imu TeX/LaTeX (jako volba
+.BR \-t )
+a znak '-' pøepne
+.I ispell
+zpìt do re¾imu nroff/troff (poslední dva pøíkazy jsou zastaralé).
+Nicménì typ øetìzcových znakù
+.I není
+tìmito pøíkazy zmìnìn; pro jeho zmìnu je tøeba pou¾ít pøíkaz '~'.
+Øádek zaèínající znakem '~' zpùsobí, ¾e
+.I ispell
+nastaví interní parametr urèující implicitní typ øetìzcových
+znakù podle jména souboru zadaného ve zbytku øádku. (Postaèuje
+pøípona souboru s teèkou na zaèátku. Místo jména souboru nebo
+pøípony mù¾e být pou¾ito unikátní jméno uvedené v souboru afixù.)
+Pøíkaz '~'
+.I nemìní
+nastavení zpùsob zpracování (formát) zpracovávaného souboru;
+pro jeho zmìnu musí být pou¾it pøíkaz '+'.
+Øádek zaèínající znakem '#' zpùsobí, ¾e bude ulo¾en osobní slovník.
+Øádek zaèínající znakem '!' zapne
+.I struèný
+re¾im (viz dále); øádek zaèínající znakem '%' pøepne
+.I ispell
+do normálního (nestruèného) re¾imu.
+Øádek zaèínající '`' pøepne
+.I ispell
+do "upovídaného" re¾imu (viz ní¾e). Tento re¾im mù¾e být zakázán
+pouze pomocí '%'.
+.PP
+Jakékoli znaky na øádku obsahujícím pøíkaz '+', '-', '#', '!', '`'
+nebo '%' jsou ignorovány, stejnì jako libovolný vstup následující
+jméno_souboru na øádku '~'. Aby bylo mo¾né kontrolovat øádky, které
+zaèínají nìkterým z tìchto znakù, je nutné na zaèátek takových
+øádkù pøidat znak '^'. Program
+.I ispell
+odstraní tento znak a zbytek øádku pøedá kódu na kontrolu pøeklepù.
+Doporuèuje se, aby programy, které komunikují tímto zpùsobem s programem
+.IR ispell ,
+pøidávaly znak '^' na ka¾dý øádek, který má být kontrolován, aby
+byly chránìny pøed budoucími zmìnami chování programu
+.IR ispell .
+.PP
+Souhrn vý¹e uvedených pøíkazù:
+.PP
+.RS
+.IP *
+Pøidat slovo do osobního slovníku
+.IP @
+Slovo pøijmout, ale nevlo¾it jej do slovníku
+.IP #
+Ulo¾it aktuální osobní slovník
+.IP ~
+Nastavit parametry podle jména_souboru
+.IP +
+Zapnout re¾im TeX
+.IP -
+Ukonèit re¾im TeX
+.IP !
+Zapnout struèný re¾im
+.IP %
+Ukonèit struèný re¾im
+.IP "`"
+Vstoupit do "upovídaného" re¾imu.
+.IP ^
+Kontrolovat zbytek øádku
+.fi
+.RE
+.PP
+Ve 
+.I struèném
+re¾imu nebude
+.I ispell
+tisknout øádky zaèínající znaky '*', '+' nebo '\-', které indikují
+správná slova. To významnì zvy¹uje rychlost bìhu pokud øídící program
+tato správná slova ignoruje.
+.PP
+V
+.I "upovídaném"
+re¾imu
+.I ispell
+vypisuje ve výstupních øádcích zaèínajících '*', '+' a '\-' pùvodní
+slovo bezprostøednì za indikaèním znakem (slou¾í ke zjednodu¹ení
+interakce s nìkterými programy).
+.PP
+Volba
+.B \-s
+je povolena pouze na systémech odvozených od BSD a pouze ve spojení
+s volbami
+.B \-a
+nebo
+.BR \-A .
+S touto volbou program
+.I ispell
+sám sebe zastaví signálem
+.B SIGTSTP
+po ka¾dém vstupním øádku.
+Pokraèovat bude a¾ po pøíchodu signálu
+.BR SIGCONT .
+Tato vlastnost slou¾í pro handshaking s urèitými textovými editory.
+.PP
+Volba
+.B \-f
+je povolena pouze ve spojení s volbami
+.B \-a
+nebo
+.BR \-A .
+S touto volbou bude
+.I ispell
+zapisovat výsledky do zadaného souboru místo standardního výstupu.
+.PP
+Volba
+.B \-v
+zpùsobí, ¾e
+.I ispell
+vypí¹e identifikaci své aktuální verzi na standardní výstup a skonèí.
+Pokud se tato volba zdvojí, vypí¹e
+.I ispell
+také volby, se kterými byl pøelo¾en.
+.PP
+Volby
+.BR \-c ,
+.BR \-e [ 1-4 ]
+a
+.B \-D
+programu
+.I ispell
+jsou primárnì urèeny pro pou¾ití shellovým skriptem
+.IR munchlist .
+Volba
+.B \-c
+zpùsobí, ¾e seznam slov bude èten ze standardního vstupu, a pro ka¾dé
+slovo bude vypsán na standardní výstup seznam v¹ech mo¾ných kombinací
+koøene a afixu, pomocí kterých lze dané slovo vygenerovat. Nìkteré
+koøeny mohou být ¹patné a musí být odfiltrovány z výstupu jinými
+prostøedky; to dìlá napøíklad skript
+.IR munchlist .
+Napøíklad pøíkaz
+.PP
+.RS
+echo BOTHER | ispell -c
+.RE
+.PP
+produkuje:
+.PP
+.RS
+.nf
+BOTHER BOTHE/R BOTH/R
+.fi
+.RE
+.PP
+Volba
+.B \-e
+je opakem volby
+.B \-c
+a expanduje pøíznaky na seznam slov.
+Napøíklad pøíkaz:
+.PP
+.RS
+echo BOTH/R | ispell -e
+.RE
+.PP
+produkuje:
+.PP
+.RS
+.nf
+BOTH BOTHER
+.fi
+.RE
+.PP
+Volitelnì mù¾e být také zadána úroveò expanze. Volba
+.B \-e
+je toté¾ co
+.BR \-e1 .
+Pøi úrovni 2 bude ka¾dému øádku pøedøazena pùvodní
+dvojice koøen/afix:
+.PP
+.RS
+.nf
+BOTH/R BOTH BOTHER
+.fi
+.RE
+.PP
+Pøi úrovni 3 bude ka¾dé vygenerované slovo na zvlá¹tním øádku a
+budou mu pøedøazeny dvojicemi koøen/afix jako v úrovni 2:
+.PP
+.RS
+.nf
+BOTH/R BOTH
+BOTH/R BOTHER
+.fi
+.RE
+.PP
+Pøi úrovni 4 budou vypisovány øádky jako v úrovni 3, ale na konci
+ka¾dého øádku bude navíc reálné èíslo udávající pomìr mezi délkou
+koøene a celkovou délkou v¹ech vygenerovaných slov vèetnì koøenù:
+.PP
+.RS
+.nf
+BOTH/R BOTH 2.500000
+BOTH/R BOTHER 2.500000
+.fi
+.RE
+.PP
+Volba
+.B \-D
+zpùsobí, ¾e tabulky afixù ze slovníkového souboru budou vypsány
+na standardní výstup.
+.PP
+Pokud vá¹ správce systému nezapnul volbu pro ¹etøení místem,
+.I ispell
+bude dbát na správné pou¾ití velkých písmen ve slovech ze základního
+i va¹eho osobního slovníku. Kromì rozpoznávání slov, která musí zaèínat
+velkých písmenem (napø. George), a slov, která musí mít v¹echno písmena
+velká (napø. NASA), mù¾e také zpracovávat slova s "neobvyklým" pou¾itím
+velkých písmen (napø. "ITCorp" nebo "TeX"). Jestli¾e jsou ve slovì
+pou¾ita velká písmena nesprávnì, seznam mo¾ností bude zahrnovat v¹echny
+povolená pou¾ití velkých písmen. (Mù¾e být povoleno více ne¾ jedno
+pou¾ití velkých písmen mù¾e být acceptable; slovník napøíklad mù¾e
+obsahovat jak "ITCorp" tak "ITcorp".)
+.PP
+Normálnì tato vlastnost nepùsobí ¾ádná pøekvapení, ale existuje jeden
+pøípad, na který musíte dávat pozor. Jestli¾e pou¾íváte interaktivní
+pøíkaz "I" pro pøidání slova, které je na zaèátku vìty (napø. první
+slovo tohoto odstavce, kdyby slovo "normálnì" nebylo ve slovníku),
+do va¹eho slovníku, bude oznaèeno jako "pou¾ití velkých písmen podle
+po¾adavku". Dal¹í výskyt tohoto slovo bez pou¾ití velkých písmen
+(napø. slovo uvedené v uvozovkách v pøedchozí vìtì) bude programem
+.I ispell
+pova¾ováno za chybu, a jako oprava bude nabídnuto slovo s velkým
+písmenem na zaèátku. Potom nezbývá ne¾ zkontrolovat, zda se jedná
+o správné slovo a stisknutím "I" pøidat do slovníku i slovo psané
+malými písmeny. Tomuto problému se mù¾ete vyhnout pou¾íváním pøíkazu
+"U" místo "I" pro pøidání slova do u¾ivatelského slovníku.
+.PP
+Pravidla pro porovnávání slov s velkými písmeny jsou následující:
+.IP (1)
+Libovolné slovo uvedené ve slovníku je správnì, i kdy¾ je napsáno
+celé velkými písmeny (napøíklad v názvech kapitol).
+.IP (2)
+Jakékoli slovo, které je ve slovníku ulo¾eno se v¹emi písmeny malými,
+se mù¾e v textu objevit napsané malými písmeny nebo s velkým poèáteèním
+písmenem (napø. na zaèátku vìty).
+.IP (3)
+Jakékoli slovo, které je ulo¾eno ve slovníku s "podivnou" kombinací
+velkých a malých písmen (tj. obsahuje jak velká tak malá písmena a
+velké písmeno je jinde ne¾ na zaèátku), musí být v textu uvedeno pøesnì
+stejnì jako ve slovníku, kromì pøípadu uvedeného v pravidle (1). Má-li
+být pøijato slovo napsané malými písmeny, musí být tak uvedeno i ve
+slovníku.
+.SS buildhash
+.PP
+Program
+.I buildhash
+vytváøí ha¹ovaný soubor se slovníkem pro pozdìj¹í pou¾ití programem
+.IR ispell .
+Jméno souboru se seznamem slov (s afixovými pøíznaky) je zadáno parametrem
+.IR dict-soubor ,
+afixové pøíznaky jsou definovány v souboru
+.IR afix-soubor .
+Vytváøený ha¹ovaný soubor bude mít jméno
+.IR hash-soubor .
+Formát vstupních souborù je popsán v manuálové stránce
+.IR ispell (4).
+Volba
+.B \-s
+(silent, tichý) potlaèí výpis obvyklých stavových zpráv na standardní
+chybový výstup.
+.SS munchlist
+.PP
+Shellový skript
+.I munchlist
+se pou¾ívá pro zmen¹ení velikosti souboru se slovníkem, zejména pro
+osobní slovníky. Lze jej také pou¾ít pro slouèení dvou slovníkù
+pou¾ívajících rùzné soubory afixù.
+Pøíkaz pøeète zadané
+.I soubory
+(nebo standardní vstup, jestli¾e nejsou zadány ¾ádné argumenty),
+zredukuje je na minimální sadu koøenù a afixù, které budou vyhovovat
+stejnému seznamu slov, a výsledek vypí¹e na standardní výstup.
+.PP
+Vstup pro munchlist mù¾e obsahuje pouze slova (napø. z osobního
+slovníku) nebo kombinace koøen/afix (pravdìpodobnì vygenerované
+pøi pøedchozích spu¹tìních programu munchlist). Ka¾dé slovo a
+kombinace koøen/afix musí být na zvlá¹tním øádku.
+.PP
+Volba
+.B \-D
+(debug, ladìní) nesma¾e doèasné soubory se standardními jmény, co¾
+lze pou¾ít pro ladicí úèely. Varování: toto volba mù¾e spotøebovat
+enormní mno¾ství diskového prostoru.
+.PP
+Volba
+.B \-v
+(verbose) zpùsobí, ¾e na standardní chybový výstup budou vypisovány
+zprávy o prùbìhu zpracování, aby u¾ivatel nebyl nervózní, ¾e
+.I munchlist
+havaroval.
+.PP
+Jestli¾e je pou¾ita volba
+.B \-s
+(strip, odtrhnout), budou slova, která jsou v zadaném souboru
+.IR hash-soubor ,
+vypu¹tìna ze seznamu slov. To mù¾e být u¾iteèné pro osobní slovníky.
+.PP
+Volba
+.B \-l
+slou¾í pro zadání alternativního jména souboru
+.I afix-soubor
+pro zpracování slovníkù pro jiné jazyky ne¾ je angliètina.
+.PP
+Volba
+.B \-c
+slou¾í pro konverzi slovníkù, které byly vytvoøeny s pou¾itím
+star¹ího souboru afixù, bez rizika nezamý¹leného vná¹ení nechtìných
+kombinací afixù do slovníku.
+.PP
+Volba
+.B \-T
+umo¾òuje konvertovat slovníky na kanonický formát øetìzcových znakù.
+Zadaný sufix je vyhledán v souboru afixù (zadaném volbou
+.BR \-l ), 
+a pak je stanoven formát øetìzcových znakù pou¾ívaný pro vstupní soubor;
+na výstupu budou v¾dy pou¾it kanonický formát øetìzcových znakù.
+Napøíklad slovník získaný ze zdrojových souborù v TeXu mù¾e být
+konvertován na kanonický formát pomocí parametru
+.BR "\-T tex" .
+.PP
+Volba
+.B \-w
+je pøedána programu
+.IR ispell .
+.SS findaffix
+.PP
+Shellový skript
+.I findaffix
+je pomùcka pro vybírání afixù pøi vytváøení nových popisù jazyka.
+V zadaných
+.I souborech
+se slovníky (nebo ve standardním vstupu, pokud nejsou zadána ¾ádná
+jména souborù) jsou vyhledány mo¾né prefixy (s volbou
+.BR \-p )
+nebo sufixy (implicitnì nebo s volbou
+.BR \-s ).
+Ka¾dý obvykle se objevující afix bude vypsán spolu s informací,
+kolikrát se objeví, s odhadem poètu bytù, které by byly u¹etøeny
+v ha¹ovaném slovníku, pokud by afix byl pøidán do souboru afixù
+pro daný jazyk. Jsou vypsány pouze afixy, které generují povolený
+základní tvar (tj. základní tvar, který se nachází v pùvodním vstupu).
+.PP
+Jestli¾e není pou¾ita volba "-c", budou mít výstupní øádky formát:
+.IP
+odtrhnout/pøidat/poèet/bytù
+.PP
+kde
+.I odtrhnout
+je øetìzec, které musí být odstranìn ze základního tvaru slova pøed
+pøidáním afixu,
+.I pøidat
+je afix, který má být pøidán,
+.I count
+udává, kolikrát se tato kombinace
+.IR odtrhnout / pøidat
+objeví, a
+.I bytù
+je odhad poètu bytù, které by mohly být ulo¾eny v syrovém souboru se
+slovníkem, pokud by tato kombinace byla pøidána do souboru afixù.
+Jako oddìlovaè polo¾ek ve výstupu bude pou¾it znak zadaný pøepínaèem
+.BR -t ;
+implicitnì lomítko ("/").
+.PP
+Je-li pou¾ita volba
+.B \-c
+("èistý výstup"), vzhled výstupu bude vizuálnì èist¹í (ale obtí¾nìji
+zpracovatelný) ve tvaru:
+.IP
+-odtrhnout+pøidat<tab>poèet<tab>bytù
+.PP
+kde
+.IR odtrhnout ,
+.IR pøidat ,
+.IR poèet ,
+a
+.I bytù
+mají stejný význam jako v pøede¹lém pøípadì, a
+.I "<tab>"
+je ASCII znak tabelátor.
+.PP
+Metoda pou¾ívaná na generování mo¾ných afixù bude také generovat
+del¹í afixy které mají stejné zaèátky nebo konce. Napøíklad
+slova "moth" a "mother" budou generovat nejenom normální
+substituce "+er", ale také "-h+her" a "-th+ther" (pøípadnì
+je¹tì del¹í, v závislosti na hodnotì argumentu
+.IR min ).
+Aby se zabránilo zahlcení výstupu tìmito afixy, je vypisování v¹ech dvojic
+afixù, které zaèínají (u prefixù konèí) stejným øetìzcem del¹ím ne¾
+.I elim
+znakù (implicitnì 1) zakázáno. Mù¾ete nastavit "elim" na hodnotu vìt¹í
+ne¾ 1, jestli¾e vá¹ jazyk pou¾ívá øetìzcové znaky; obvykle se potøeba
+tohoto parametru stane zjevnou, kdy¾ zkontrolujete výstupy va¹ich
+spu¹tìní programu
+.IR findaffix .
+.PP
+Normálnì jsou afixy setøídìné podle odhadu u¹etøených bytù.
+Volba
+.B \-f
+zpùsobí, ¾e afixy budou setøídìny podle frekvence výskytu.
+.PP
+Pro zmen¹ení velikosti výstupního souboru budou eliminovány afixy,
+které se objeví ménì ne¾ 10 krát; tento limit mù¾e být zmìnìn volbou
+.BR \-l .
+Volba
+.B \-M
+urèuje maximální délku afixù (implicitnì 8). Del¹í afixy nebudou vypsány.
+(Tato volba ¹etøí prostor, který zabírají doèasné diskové soubory,
+a urychluje bìh skriptu.)
+.PP
+Afixy který generují slovní kmeny krat¹í ne¾ 3 znaky jsou potlaèeny.
+(Kmen je slovo po odstranìní øetìzce
+.IR odtrhnout
+a pøed pøidáním øetìzce
+.IR pøidat .)
+Tím se zmen¹í jak èas bìhu, tak velikost výstupního souboru.
+Tento limit mù¾e být zmìnìn pøepínaèem
+.BR \-m .
+Nenastavujte minimální délku kmene na 1, pokud nemáte
+.I spoustu
+volného èasu a diskového prostoru (v mìøítku mnoha dní a stovek megabytù).
+.PP
+Skript
+.I findaffix
+vy¾aduje pro interní pou¾ití nemezerový znak jako separátor polo¾ek.
+Normálnì je tímto znakem lomítko ("/"), ale pokud se lomítko vyskytuje
+jako znak ve zpracovávaném seznamu slov, mù¾e být pomocí volby
+.B \-t
+zadán jiný znak.
+.PP
+Slovníky pro ispell musí být pøed zpracováním programem
+.I findaffix 
+expandovány, a znaky s diakritikou musí být pøevedeny na malá písmena.
+.SS tryaffix
+.PP
+Shellový skript
+.I tryaffix
+se pou¾ívá pro odhad efektivnosti navrhovaného prefixu (s volbou
+.BR \-p )
+nebo sufixu (implicitnì nebo s volbou
+.BR \-s )
+pro daný
+.IR expandovaný-soubor .
+Pøi ka¾dém spu¹tìní programu
+.I tryaffix
+mù¾e být zkou¹en pouze jeden afix, ale lze pou¾ít více argumentù pro
+popis rùzných forem stejného afixového pøíznaku (napø. pøíznak
+.B D
+mù¾e v angliètinì pøidat koncovku
+.I D
+nebo
+.IR ED ,
+podle toho, zda slovo konèí na E nebo ne).
+Ka¾dé slovo v expandovaném slovníku, které konèí (nebo zaèíná) vybraným
+sufixem (nebo prefixem) má tento sufix (prefix) odstranìný; ve slovníku
+se pak hledá základní tvar slova, který vyhovuje slovu po odtr¾ení této
+èásti. Normálnì jsou na standardní výstup vypsány v¹echny vyhovující
+kombinace. Pokud je pou¾ita volba
+.B \-c
+(count), bude vypsán pouze statistický souhrn výsledkù: poèet slov, na
+které lze afix potenciálnì aplikovat a odhad poètu bytù slovníku, které
+by se u¹etøily, pokud by byl pou¾it pøíznak definující zkou¹ené afixy.
+Pokud pøíznak generuje slova, která jsou generována i jinými pøíznaky,
+bude odhad pøíli¹ vysoký (napø. v angliètinì mù¾e být slovo
+.I bathers
+vygenerováno pomocí
+.I bath/X
+nebo
+.IR bather/S ).
+.P
+Soubor
+.I expandovaný-soubor
+se slovníkem musí být pøedem expandován (pomocí volby
+.B \-e
+programu
+.IR ispell )
+a setøídìn. Maximální efektivity se obvykle dosáhne, pokud budou
+velká písmena pøedem pøevedena na malá (napøíklad programem 'tr').
+.PP
+Argument
+.I afix
+je øetìzec, který má být odtr¾en ze slov v souboru se slovníkem, aby
+byl získán zku¹ební koøen: pøíkladem prefixu v angliètinì je
+.I con
+a pøíkladem sufixu
+.IR ing .
+Èásti argumentu oznaèené
+.I pøídavek
+jsou øetìzce, které mají být odtr¾eny od
+základního tvaru pro získání koøene, za který se pøidává afix.
+V angliètinì napøíklad afix
+.I ing
+normálnì odtrhává koncové
+.I e
+ze slov, která tímto znakem konèí (tak se napø. ze slova
+.I like
+stane slovo
+.IR liking ),
+tak¾e je mo¾né spustit:
+.PP
+.RS
+.nf
+tryaffix ing ing+e
+.fi
+.RE
+.PP
+pro pokrytí obou pøípadù.
+.PP
+V¹echny shellové skripty obsahují dokumentaci v komentáøích na svém
+zaèátku; tyto komentáøe mohou obsahovat i u¾iteèné informace, které
+nejsou uvedeny na této manuálové stránce.
+.PP
+V pøípadì potøeby lze program
+.I ispell
+nainstalovat takovým zpùsobem, aby zpracovával pouze ASCII texty.
+.SS icombine
+.I icombine
+je pomocný program pro
+.IR munchlist .
+Naèítá ze standardního vstupu seznam slov v tomté¾ formátu, v jakém
+jsou ve slovníku (koøen/pøíznaky), a na standardní výstup vypisuje
+redukovaný seznam, v nìm¾ jsou zkombinovány pøíznaky u koøenù, které
+se na vstupu vyskytly vícekrát; pokud se v nìkolika po sobì jdoucích
+øádcích objeví stejný koøen, bude na výstup vypsán pouze jeden øádek
+obsahující tento koøen se v¹emi pou¾itými pøíznaky. Koøeny, ve kterých
+byla rùznì pou¾ita velká písmena, budou zkombinovány tak, aby informace
+o pou¾ití velkých písmen byly zachovány. Volitelný parametr
+.I aff-soubor
+urèuje soubor afixù, ve kterém jsou definovány pou¾ívané znakové sady a
+význam jednotlivých pøíznakù.
+Volba
+.B \-T
+umo¾òuje výbìr rùzných typù øetìzcových znakù zadáním nastrèeného
+sufixu definovaného pøíkazem
+.BR altstringtype .
+.SS ijoin
+Program
+.I ijoin
+je reimplementací programu
+.IR join (1).
+Program
+.I ijoin
+správnì zpracovává dlouhé øádky a 8-bitové znaky.
+Volba
+.B \-s
+udává, ¾e program
+.IR sort (1)
+pou¾ívaný pro pøípravu vstupu pro program
+.I ijoin
+porovnává 8-bitové znaky jako hodnoty se znaménkem. Volba
+.B \-u
+naopak udává, ¾e program
+.IR sort (1)
+pou¾ívá porovnání bez znaménka.
+V¹echny dal¹í volby a chování programu
+.IR join (1)
+jsou pøevzaty z jeho manuálové stránky, s tou odchylkou, ¾e
+.I ijoin
+nepova¾uje znak newline za oddìlovaè polo¾ek.
+Dal¹í informace naleznete v manuálové stránce programu
+.IR join (1).
+.SH PROMÌNNÉ PROSTØEDÍ
+.IP DICTIONARY
+Jméno slovníku, který bude pou¾it, pokud není zadána volba
+.BR \-d .
+.IP CHARSET
+Bere se v úvahu pouze tehdy, je-li nastaveno
+.BR DICTIONARY .
+Stanovuje implicitní formát a kódování znakù, kdy¾ nejsou pou¾ity volby
+.BR \-T ,
+.B \-t
+nebo
+.BR \-n .
+Je u¾iteèný, je-li formát definován v souboru afixù.
+.IP WORDLIST
+Jméno souboru s osobní slovníkem.
+.IP INCLUDE_STRING
+Jméno direktivy pro vlo¾ení souboru pøi pou¾ití volby
+.BR \-A .
+.IP TMPDIR
+Adresáø pou¾ívaný programem munchlist pro doèasné soubory.
+.IP TEXSKIP1
+Seznam klíèových slov TeXu, které mají jeden argument, který nemá
+.I ispell
+kontrolovat.
+.IP TEXSKIP2
+Seznam klíèových slov TeXu, které mají dve argumenty, které
+I ispell
+nemá kontrolovat.
+.IP HTMLIGNORE
+Seznam HTML znaèek, které ohranièují text, který nemá být kontrolován.
+.IP HTMLCHECK
+Seznam parametrù HTML znaèek, jejich¾ hodnoty mají být kontrolovány
+i uvnitø HTML znaèky.
+.SH SOUBORY
+.IP /usr/lib/ispell/english.hash
+Ha¹ovaný slovník pro angliètinu (mù¾e být hledán v jiném adresáøi podle
+konkrétního systému).
+.IP /usr/lib/ispell/english.aff
+Soubor s definicemi afixù pro angliètinu pro program
+.I munchlist
+.IP "/usr/dict/web2 nebo /usr/dict/words"
+Dal¹í soubor pro vyhledávání slov (závisí na volbì WORDS pøi pøekladu).
+.IP $HOME/.ispell_\fIhashfile\fP
+U¾ivatelský osobní slovník.
+.IP .ispell_\fIhashfile\fP
+Slovník pro daný adresáø.
+.SH VIZ TAKÉ
+.IR spell (1),
+.IR egrep (1),
+.IR look (1),
+.IR join (1),
+.IR sort (1),
+.IR sq (1),
+.IR ispell (5),
+.IR english (5).
+.SH CHYBY
+Naètení ha¹ovaného slovníku mù¾e podle jeho velikosti trvat nìkolik
+sekund nebo i déle.
+.sp
+Jsou-li povoleny v¹echny volby, mù¾e generování v¹ech odhadù pro
+¹patnì napsané slovo trvat nìkolik sekund; na pomalej¹ích strojích
+to mù¾e být nepøíjemné.
+.sp
+Ha¹ovací tabulka je ulo¾ena jako ètvrtmegabytové (nebo vìt¹í) pole,
+tak¾e pravdìpodobnì nebude nikdy existovat verze pro PDP-11 nebo
+Intel 80286.
+.sp
+Program
+.I ispell
+by mìl lépe rozumìt syntaxi souborù pro
+.IR troff ,
+a inteligentnìji se vypoøádat se zkratkami.
+.sp
+Pøesto¾e jsou malé osobní slovníky pøed ulo¾ením tøídìny, je poøadí,
+v jakém se vypisují rùzné varianty pou¾ití velkých písmen v jednom
+slovì, ponìkud náhodné.
+.sp
+Pøi pou¾ití volby
+.B \-x
+program
+.I ispell
+ma¾e soubory s pøíponou .bak.
+.sp
+Program
+.I ispell
+má pøíli¹ mnoho voleb, a mnohé z nich nemají mnemonická jména.
+.sp
+Program
+.I munchlist
+nepracuje pøíli¹ elegantnì se slovníky, které obsahují
+"neslovní" znaky. Takové znaky by mìly být ze slovníku smazány
+a souèasnì by mìlo být vypsáno varování.
+.sp
+Pøi pou¾ití rozsáhlých slovníkù vy¾adují pøíkazy
+.I findaffix
+a
+.I munchlist
+velké mno¾ství diskového prostoru pro doèasné soubory. Tyto soubory
+se vytváøejí v adresáøi zadaném promìnnou prostøedí TMPDIR, tak¾e
+lze ovlivòovat jejich umístìní. Podstatná èást prostoru pro doèasné
+diskové soubory se v¹ak vyu¾ívá pøi tøídìní, tak¾e na systémech,
+kde program
+.IR sort (1)
+neakceptuje nedokumentovanou volbu -T, zmìna nastavení promìnné
+TMPDIR pøíli¹ nepomù¾e.
+Program
+.I munchlist
+ète pùvodní slovník 10 a¾ 40 krát. (Vìt¹í pomìr je u slovníkù, které
+pou¾ívají mno¾ství afixù, jako je tomu u anglického slovníku
+distribuovaného s programem
+.IR ispell .)
+Také program
+.I munchlist
+je velmi pomalý;
+zpracování slovníku normální velikosti (15K koøenù, 45K výsledných slov)
+trvá na malé pracovní stanici okolo jedné hodiny.
+(Vìt¹ina èasu je spotøebována programem
+.IR sort (1);
+program
+.I munchlist
+mù¾e bì¾et podstatnì rychleji na strojích, které mají modernìj¹í
+.IR sort ,
+který lépe pou¾ívá dostupnou pamì».)
+Program
+.I findaffix
+je je¹tì hor¹í;
+ani nejmen¹í anglický slovník nemù¾e být tímto skriptem zpracován
+v 50 KB volné pamìti, a s volbou pro omezení po¾adovaného
+doèasného prostoru bì¾í skript na malé pracovní stanici více ne¾
+24 hodin.
+.SH AUTOØI
+Pace Willisson (pace@mit-vax) napsal program ispell v roce 1983
+podle assemblerové verze pro PDP-10 od R. E. Gorina z roku 1971,
+revidované W. E. Matsonem (1974) a W. B. Ackermanem (1978).
+.P
+Pro Usenet shromá¾dil, revidoval a vylep¹il Walt Buehring, 1987.
+.P
+Autorem tabulkou øízené vícejazyèná verze je Geoff Kuenning, 1987-88.
+.P
+Velké anglické slovníky poskytl Bob Devin (vianet!devine).
+.P
+Kompletní seznam pøispívatelù zde není uveden, proto¾e je pøíli¹ rozsáhlý.
+Je v¹ak distribuován se zdrojovými texty programu ispell jako soubor
+"Contributors".
+.SH VERZE
+Tato manuálová stránka popisuje ispell verze
+"International Ispell Version 3.1.20, 10/10/95".

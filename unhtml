@@ -1,0 +1,100 @@
+#!/usr/bin/perl
+ 
+  $where=0;
+  $next=0;
+  while (defined($what=&ReadNext)) {
+    if ($where==0 && $prev!=1 && $prev!=3) {
+      print $what;
+    } else {
+      print " ";
+    }
+    $prev=$where;
+  }
+
+sub ReadNext {
+  if (!$line) {
+    return undef if !($line=<>);
+#print "READ: $line";
+    $line=~s/\&nbsp\;/ /g;
+  }
+  if ($where==0) {
+    if ($line=~s/^([^<]+)//) {
+      $symbol=$1;
+#print "\$symbol:\"$symbol\"";
+      # OK
+    } elsif ($line=~s/^(\<)//) {
+      $symbol=$1;
+#print "\$symbol:\"$symbol\"";
+      $where=1;
+#print " ->1 ";
+    }
+  } elsif ($where==1) {
+    if ($line=~s/^(\!--)//) {
+      $symbol=$1;
+#print "Poznamka\n";
+      $where=3;
+      $ending='-->';
+    } elsif ($line=~s/^([^>"]+)//) {
+      $symbol=$1;
+#print "\$symbol:\"$symbol\"";
+      # OK
+      if ($symbol=~/^style\b/i) {
+#print "Kaskadovy styl\n";
+        $next=3;
+        $ending='<\\/style>';
+      } elsif ($symbol=~/^script\b/i) {
+#print "Skript\n";
+        $next=3;
+        $ending='<\\/script>';
+      } elsif ($symbol=~s/^\!--//) {
+#print "Poznamka\n";
+        $where=3;
+        $ending='-->';
+      }
+    } elsif ($line=~s/^(\")//) {
+      $symbol=$1;
+#print "\$symbol:\"$symbol\"";
+      $where=2;
+#print " ->2 ";
+    } elsif ($line=~s/^(\>)//) {
+      $symbol=$1;
+#print "\$symbol:\"$symbol\"";
+      $where=$next;
+#print " ->$where ";
+      $next=0;
+    }
+  } elsif ($where==2) {
+    if ($line=~s/^([^"]+)//) {
+      $symbol=$1;
+#print "\$symbol:\"$symbol\"";
+      # OK
+    } elsif ($line=~s/^(\")//) {
+      $symbol=$1;
+#print "\$symbol:\"$symbol\"";
+      $where=1;
+#print " ->1 ";
+    }
+  } elsif ($where==3) {
+#print "Radek: >>>$line<<<";
+    if ($line=~s/^(.+?)($ending)/$2/i) {
+#print "Bude $ending...";
+      $symbol=$1;
+    } elsif ($line=~s/^$ending//i) {
+#print "Je $ending...";
+      $where=0;
+#print "Opouštím $ending ->$where ";
+#print "\$prev: $prev\n";
+      $symbol='';
+    } else {
+#print "Není $ending...";
+      $symbol=$line;
+      $line='';
+    }
+  }
+#print "($where:$1)";
+  $symbol=~s/\&quot\;/"/g;
+  $symbol=~s/\&amp\;/&/g;
+  $symbol=~s/\&lt\;/</g;
+  $symbol=~s/\&gt\;/>/g;
+  return $symbol;
+}

@@ -1,0 +1,419 @@
+#!/usr/bin/perl
+
+use locale;
+
+if ($#ARGV>=0) {
+  if ($ARGV[0] eq '-r') {
+    $doplnek=1;
+    shift;
+  }
+  if ($ARGV[0] eq '-f') {
+    $printflag=1;
+    shift;
+  }
+  if ($ARGV[0] eq '-b') {
+    $badwords=1;
+    shift;
+  }
+}
+while (<>) {
+  s/\n$//;
+  if (/[^dtnbpvmfw]ě/i || /[ďťňžščřj][yý]/i || /(.)\1\1/ || /^[ěýů]/i ||
+      /ď[^aáčkmnostuů]/i || /ň[^aáčdkmosuů]/i || /ť[^aáhkmnostuů]/ ||
+      /q[^u]/i || /[žščř]ie/i || /júc/i || /([áďéěhíňóqťúůvwxyýž])\1/i) {
+    if ($badwords) {
+      print $_, "\n";
+    } else {
+      next;
+    }
+  }
+  $Slova{$_}=1;
+}
+exit if $badwords;
+foreach $_ (keys %Slova) {
+  $print=0;
+  $flag='';
+  if (
+      s/čnost(|i|í|em|ech|mi)$/cký/) {
+    $flag='YCRN';
+    $print=1;
+  } elsif (
+      s/(ismus|ismu|ismem|isme|ismy|ismů|ismům|ismech|izmus|izmu|izmem|izme|izmy|izmů|izmům|izmech)$/ismus/) {
+    $flag='Q';
+    $print=1;
+  } elsif (
+      s/izac(e|i|í|ím|ích|emi)$/izace/) {
+    $flag='Z';
+    $print=1;
+  } elsif (
+      s/(ace|acemi)$/ace/) {
+    $flag='Z';
+    $print=1;
+  } elsif (
+      s/ost(i|mi|í)$/ost/) {
+    $flag='K';
+    $print=1;
+  } elsif (
+      ($pom=$_)=~s/í$// &&
+      ($Slova{"${pom}ost"} || $Slova{"${pom}osti"} || $Slova{"${pom}ostí"} ||
+      $Slova{"${pom}ostem"} || $Slova{"${pom}ostech"} || $Slova{"${pom}ostmi"}
+      )) {
+    $_="${pom}í";
+    $flag='K';
+    $print=1;
+  } elsif (
+      s/([^ýěeaí])mi$/$1/) {
+    $flag='K';
+    $print=1;
+  } elsif (
+      s/^([A-ZŽŠČŘĎŤŇÁÉÍÓÚŮÝĚ].*)ic[ií]$/${1}ice/) {
+    $flag='S';
+    $print=1;
+  } elsif (
+      s/^([A-ZŽŠČŘĎŤŇÁÉÍÓÚŮÝĚ].*)ic(|emi)$/${1}ice/) {
+    $flag='C';
+    $print=1;
+  } elsif (
+      s/^([a-zžščřďťňáéíóúýě].*)ice$/${1}ice/) {
+    $flag='ZQ';
+    $print=1;
+  } elsif (
+      s/([aeou])ce$/${1}ce/) {
+    $flag='Z';
+    $print=1;
+  } elsif (
+      ($pom=$_)=~s/ům$/o/ && $Slova{$pom}) {
+    $_=$pom;
+    $flag='MQ';
+    $print=1;
+  } elsif (
+      s/ař(e|em|i|ích|ů|ům)?$/ař/) {
+    $flag='U';
+    $print=1;
+  } elsif (
+      s/ář(e|em|i|ích|ů|ům)?$/ář/) {
+    $flag='U';
+    $print=1;
+  } elsif (
+      s/íř(e|em|i|ích|ů|ům)?$/íř/) {
+    $flag='U';
+    $print=1;
+  } elsif (
+      s/ist(a|ech|o|ou|ovi|u|y|é|ů|ům)$/ista/) {
+    $flag='PD';
+    $print=1;
+  } elsif (
+      s/ist(ce|ka|ek|kami|ko|kou|ku|ky|kách|kám)$/istka/) {
+    $flag='ZQ';
+    $print=1;
+  } elsif (
+      s/at(ce|ka|ek|kami|ko|kou|ku|ky|kách|kám)$/atka/) {
+    $flag='ZQ';
+    $print=1;
+  } elsif (
+      s/el(ce|ka|ek|kami|ko|kou|ku|ky|kách|kám)$/elka/) {
+    $flag='ZQ';
+    $print=1;
+  } elsif (
+      s/ov(ně|na|en|nami|no|nou|nu|ny|nách|nám)$/ovna/) {
+    $flag='ZQ';
+    $print=1;
+  } elsif (
+      s/óz(a|e||ami|o|ou|u|y|ách|ám)$/óza/) {
+    $flag='ZQ';
+    $print=1;
+  } elsif (
+      s/tid(ě|a||ami|o|ou|u|y|ách|ám)$/tida/) {
+    $flag='ZQ';
+    $print=1;
+  } elsif (
+      s/ač(e|em|i|ích|ů|ům)?$/ač/) {
+    $flag='S';
+    $print=1;
+  } elsif (
+      s/eč(e|em|i|ích|ů|ům)?$/eč/) {
+    $flag='S';
+    $print=1;
+  } elsif (
+      s/ěč(e|em|i|ích|ů|ům)?$/ěč/) {
+    $flag='S';
+    $print=1;
+  } elsif (
+      s/áč(e|em|i|ích|ů|ům)?$/áč/) {
+    $flag='U';
+    $print=1;
+  } elsif (
+      s/ďkům?$/děk/ ||
+      s/ňkům?$/něk/ ||
+      s/ťkům?$/těk/ ||
+      s/([^aeiouyáéíóúůýě])kům?$/${1}ek/ ||
+      s/([^aeiouyáéíóúůýě])kům?$/${1}ek/ ||
+      s/([^aeiouyáéíóúůýě])kům?$/${1}ek/ ||
+      s/([^aeiouyáéíóúůýě])cům?$/${1}ec/ ||
+      s/ům?$//) {
+    if ($Slova{"${_}o"} || $Slova{"${_}ou"} || /ist$/) {
+      $_ .= 'a';
+      $flag='PD';
+    } elsif (/ec$/) {
+      $pom=$_;
+      $pom=~s/ec$/cové/;
+      if ($Slova{"${pom}ové"}) {
+        $flag='UV';
+      } else {
+        $flag='U';
+      }
+    } elsif (/tel$/) {
+      $flag='UD';
+    } elsif (/at$/) {
+      $flag='PDI';
+    } elsif ($Slova{"${_}ové"} && $Slova{"${_}i"}) {
+      $flag='PIV';
+    } elsif ($Slova{"${_}ové"}) {
+      $flag='PV';
+    } elsif ($Slova{"${_}i"}) {
+      $flag='PI';
+    } elsif ($Slova{"${_}u"} && $Slova{"${_}a"}) {
+      $flag='P';
+    } elsif ($Slova{"${_}a"}) {
+      $flag='L';
+    } elsif ($Slova{"${_}ě"}) {
+      $flag='HR';
+    } elsif (/něk$/ || /e[kl]$/) {
+      $flag='Q';
+    } else {
+      $flag='H';
+    }
+    $print=1;
+  } elsif (
+      s/ami$/a/) {
+    $flag='ZQ';
+    $print=1;
+  } elsif (
+      s/emi$/e/) {
+    $flag='ZQ';
+    $print=1;
+  } elsif (
+      s/(ovati?|uji|uješ|uje|ujeme|ujete|ují|uj|ujme|ujte|oval[aoiy]?|ován[aoiyu]?)$/ovat/) {
+    $flag='ATN';
+    $print=1;
+  } elsif (
+      s/áv(ati?|ám|áš|á|áme|áte|ají|ej|ejme|ejte|al[aoiy]?|án[aoiyu]?)$/ávat/) {
+    $flag='JTN';
+    $print=1;
+  } elsif (
+      s/outi?$/out/) {
+    $flag='ATN';
+    $print=1;
+  } elsif (
+      ($pom=$_)=~s/ov(ou|ých|ým|ými|ýma)$// &&
+      ($Slova{"${pom}ův"} || $Slova{"${pom}ova"} || $Slova{"${pom}ovo"}
+      || $Slova{"${pom}ovi"} || $Slova{"${pom}ovy"} || $Slova{"${pom}ovu"}
+      || $Slova{"${pom}ově"})) {
+    $_="${pom}ův";
+    $flag='Y';
+    $print=1;
+  } elsif (
+      s/tel(|e|em|i|é|ích|ů|ům)$/tel/) {
+    $flag='UD';
+    $print=1;
+  } elsif (
+      ($pom=$_)=~s/([^aeiouyáéíóúůýě])rum$/$1/ &&
+        ($Slova{"${pom}ra"} || $Slova{"${pom}ru"} ||
+        $Slova{"${pom}rem"} || $Slova{"${pom}er"} || $Slova{"${pom}rům"} ||
+        $Slova{"${pom}rech"} || $Slova{"${pom}ry"})) {
+    $_="${pom}rum";
+    $flag='MQ';
+    $print=1;
+  } elsif (
+      ($pom=$_)=~s/([aeiouyáéíóúůýě])um$/$1/ &&
+        ($Slova{"${pom}a"} || $Slova{"${pom}u"} ||
+        $Slova{"${pom}em"} || $Slova{"${pom}í"} || $Slova{"${pom}ům"} ||
+        $Slova{"${pom}ích"} || $Slova{"${pom}i"})) {
+    $_="${pom}um";
+    $flag='M';
+    $print=1;
+  } elsif (
+      ($pom=$_)=~s/um$// && ($Slova{"${pom}a"} || $Slova{"${pom}u"} ||
+        $Slova{"${pom}em"} || $Slova{"${pom}"} || $Slova{"${pom}ům"} ||
+        $Slova{"${pom}ech"} || $Slova{"${pom}y"})) {
+    $_="${pom}um";
+    $flag='MQ';
+    $print=1;
+  } elsif (
+      s/ívá(m|š||me|te)$/ívat/) {
+    $flag='AN';
+    $print=1;
+  } elsif (
+      s/ck(á|é|ého|ém|ému|ý|ých|ým|ými)$/cký/) {
+    $flag='YCRN';
+    $print=1;
+  } elsif (
+      s/(á|é|ého|ém|ému|ý|ých|ým|ými)$/ý/) {
+    $flag='YKRN';
+    $print=1;
+  } elsif (
+      s/ější(ho|mu|ma|mi|ch|m)?$/ější/) {
+    $flag='YRW';
+    $print=1;
+  } elsif (
+      s/tní(ho|mu|ma|mi|ch|m)?$/tní/) {
+    $flag='YKRN';
+    $print=1;
+  } elsif (
+      s/([ai]cí)(ho|mu|ma|mi)$/$1/) {
+    $flag='Y';
+    $print=1;
+  } elsif (
+      s/cí(ho|mu|ma|mi)$/cí/) {
+    $flag='YN';
+    $print=1;
+  } elsif (
+      ($pom=$_)=~s/ací(m|ch)?$/ace/i &&
+      ($Slova{"${pom}"} || $Slova{"${pom}mi"})) {
+    $_=$pom;
+    $flag='Z';
+    $print=1;
+  } elsif (
+      s/([ai]cí)(m|ch)?$/$1/) {
+    $flag='Y';
+    $print=1;
+  } elsif (
+      s/cí(m|ch)?$/cí/) {
+    $flag='YN';
+    $print=1;
+  } elsif (
+      ($pom=$_)=~s/(..[bcčdfghjklmnoprřsštvxzž]n)í(ho|mu|ma|mi|ch|m)?$/${1}/ &&
+        !($Slova{"${pom}ou"} || $Slova{"${pom}á"} || $Slova{"${pom}é"} || 
+        $Slova{"${pom}ého"} || $Slova{"${pom}ém"} || $Slova{"${pom}ému"} || 
+        $Slova{"${pom}ý"} || $Slova{"${pom}ých"} || $Slova{"${pom}ým"} || 
+        $Slova{"${pom}ýma"} || $Slova{"${pom}ými"})) {
+    $_="${pom}í";
+    $flag='YKRN';
+    $print=1;
+  } elsif (
+      s/ční(ho|mu|ma|mi|ch|m)?$/ční/) {
+    $flag='YKRN';
+    $print=1;
+  } elsif (
+      s/ící(ho|mu|ma|mi|ch|m)?$/ící/) {
+    $flag='YN';
+    $print=1;
+  } elsif (
+      s/(ího|ímu)$/í/) {
+    $flag='YKRN';
+    $print=1;
+  } elsif (
+# aáďeéěiíňóprťuúyý
+# pouze Y [bcčdfghjklmnopřsštvxzž]ní
+# pouze S [ěi]ní
+# spíše Y rní
+# spíše S [áe]ní
+# oba [aíu]ní
+      s/án(í|ích|ím|ími)$/ání/) {
+    $flag='SN';
+    $print=1;
+  } elsif (
+      s/([ěiáe])n(í|ích|ím|ími)$/${1}ní/) {
+    $flag='SN';
+    $print=1;
+  } elsif (
+      s/([sc]tv)(í|ích|ím|ími)$/${1}í/) {
+    $flag='S';
+    $print=1;
+  } elsif (
+      s/([aeěuy]t)(í|ích|ím|ími)$/${1}í/) {
+    $flag='S';
+    $print=1;
+  } elsif (
+      s/(ice|ici|icí|ic|icemi)$/ice/) {
+    $flag='ZQ';
+    $print=1;
+  } elsif (
+      s/([ae]nc)(e|i|í|ím|ích|emi)$/${1}e/) {
+    $flag='Z';
+    $print=1;
+  } elsif (
+      s/(išť|iště|išti|ištěm|ištích|ištím)$/iště/) {
+    $flag='M';
+    $print=1;
+  } elsif (
+      s/(ie|ii|ií|iím|iích|iemi)$/ie/) {
+    $flag='Z';
+    $print=1;
+  } elsif (
+      s/(yně|yni|yní|yň|yním|yních|yněmi)$/yně/) {
+    $flag='ZQ';
+    $print=1;
+  } elsif (
+      s/(ovati?|uji|uješ|uje|ujeme|ujete|ují|uj|ujme|ujte)$/ovat/) {
+    $flag='ATN';
+    $print=1;
+  } elsif (
+      s/(ávati?|ávám|áváš|ává|áváme|áváte|ávají|ávej|ávejme|ávejte|ával[aoiy]?)$/ávat/) {
+    $flag='JTN';
+    $print=1;
+  } elsif (
+      s/ej$/ý/) {
+    $flag='YKRN';
+    $print=1;
+  } elsif (
+      s/(eti|íš|íme|íte|ejí|ej|ejme|ejte)$/et/) {
+    $flag='ATN';
+    $print=1;
+  } elsif (
+      s/(eti|íš|íme|íte|ejí|uj|ujme|ujte)$/et/) {
+    $flag='ATN';
+    $print=1;
+  } elsif (
+      ($pom=$_)=~s/ou$// &&
+      ($Slova{"${pom}á"} && !$Slova{"${pom}ém"} && !$Slova{"${pom}ému"}
+      && !$Slova{"${pom}ého"} && !$Slova{"${pom}í"} && !$Slova{"${pom}ý"})) {
+    $_="${pom}á";
+    $flag='Y';
+    $print=1;
+  } elsif (
+      ($pom=$_)=~s/ou$// &&
+      ($Slova{"${pom}á"} || $Slova{"${pom}é"} || $Slova{"${pom}ého"}
+      || $Slova{"${pom}ém"} || $Slova{"${pom}ému"} || $Slova{"${pom}í"}
+      || $Slova{"${pom}ý"} || $Slova{"${pom}ých"} || $Slova{"${pom}ým"}
+      || $Slova{"${pom}ýma"} || $Slova{"${pom}ými"})) {
+    $_="${pom}ý";
+    $flag='YKRN';
+    $print=1;
+  } elsif (
+      s/ově$/ový/) {
+    $flag='YKRN';
+    $print=1;
+  } elsif (
+      s/(ův|ova|ovo|ovi|ovy|ovu|ovou|ově)$/ův/) {
+    $flag='Y';
+    $print=1;
+  } elsif (
+      ($pom=$_)=~s/cky$// && 
+      ($Slova{"${pom}čnost"} || $Slova{"${pom}čnosti"}
+      || $Slova{"${pom}čností"} || $Slova{"${pom}čnostem"}
+      ||$Slova{"${pom}čnostech"} || $Slova{"${pom}čnostmi"})) {
+    $_="${pom}cký";
+    $flag='YCRN';
+    $print=1;
+  } elsif (
+      s/cky$//) {
+    $_="${pom}cký";
+    $flag='YKRN';
+    $print=1;
+  } elsif (
+      s/in(|u|e|em|y|ů|ům|ech)$/in/) {
+    $flag='H';
+    $print=1;
+  }
+  if (/^bez/ || /^mezi/ || /^anti/ || /^proti/ || /^celo/ || /^mimo/ || /^několika/) {
+    $flag=~s/N//;
+  }
+  if ($print != $doplnek) {
+    if ($flag && $printflag) {
+      print "$_/$flag\n";
+    } else {
+      print "$_\n";
+    }
+  }
+}

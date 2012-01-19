@@ -1,0 +1,14 @@
+#!/bin/sh
+TMPFILE=`mktemp -q ${TMPDIR:-/tmp}/fspell.XXXXXX`
+if [ "$?" -eq "0" ]; then
+    cat > $TMPFILE
+# Unfortunatelly trapping errors doesn't work when called from vim 
+    trap 'cat $TMPFILE; exit 0' 1 2 13 15
+    ispell -d czech $TMPFILE < /dev/tty > /dev/tty
+    cat $TMPFILE
+    rm -f $TMPFILE
+    exit 0
+else
+    cat
+fi
+exit 0
